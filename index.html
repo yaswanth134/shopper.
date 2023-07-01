@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.">
+    <title>shopper.</title>
+    <link rel="shortcut icon" href="./public/images.gif">
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <style>
+        a{
+            cursor: pointer;
+        }
+        iframe{
+            border: none;
+            height: 600px;
+            width: 600px;
+        }
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        li{
+            padding: 5px;
+        }
+        #home a{
+            color: black;
+        }
+        #home a:hover{
+            color: red;
+        }
+        #op:hover{
+            opacity: 0.8;
+        }
+        #homesec a:hover{
+            color: red;
+            text-decoration-line: underline;
+        }
+        div[name="cover1"]:hover{
+            opacity: 0.8;
+        }
+        a[name="banner"]:hover{
+            margin-left: 4px;
+        }
+        a[name="banner"]:hover span{
+            margin-left: 4px;
+        }
+        #usnder{
+            margin-left: 670px;
+            margin-right: 670px;
+        }
+        #usnder:hover{
+            border-bottom: 1px black solid;
+            transition: 2s;
+        }
+        #btn3:hover span{
+            margin-left: 5px;
+        }
+        #logoes span{
+            margin: 30px;
+        }
+        #rd div{
+            margin: 5px;
+        }
+        #rd div div{
+            display: none;
+            color: whitesmoke;
+        }
+        #rd div:hover div{
+            display: block;
+        }
+        div[name="r5"] div{
+            display: none;
+        }
+        div[name="r5"]:hover div{
+            display: block;
+        }
+        div[name='r4']{
+            background-color: white;
+        }
+        div[name="r4"]:hover{
+            background-color: tomato;
+        }
+        div[name="r1"]{
+            display: none;
+        }
+        div[name="r2"]:hover div{
+            display: block;
+        }
+        div[name="r3"]{
+            background-color: white;
+            font-size: large;
+        }
+        div[name="r3"]:hover{
+            background-color: tomato;
+        }
+    </style>
+    <script>
+        /*    function csa1(){
+                document.getElementById('pa').innerHTML="";
+                list1.map(function(product){
+                    let div=document.createElement("div");
+                    div.innerHTML=`
+                    <div class="me-5 ms-4 mb-3">
+                        <img src="${product.image}" class="card-img-top" height:"140px">
+                        <div style="color:grey">${product.name}</div>
+                        <div style="color:black"><b>${product.desc}</b></div>
+                        <div style="color:grey"><b>${product.price}</b></div>
+                    </div>
+                    `;
+                    document.getElementById('pa').appendChild(div);
+                })
+            }
+        */
+        function gettime1(){
+            let now =new Date();
+            var start = new Date(now.getFullYear(),0,1);
+            var diff = now - start;
+            var oneDay = 1000 * 60 * 60 * 24;
+            var day = Math.floor(diff / oneDay);
+            document.getElementById("day").innerHTML=365-day;
+            document.getElementById("time").innerHTML=24-now.getHours();
+            document.getElementById("minu").innerHTML=60-now.getMinutes();
+            document.getElementById("seco").innerHTML=60-now.getSeconds();
+        }
+        function fastsize(value){
+            document.getElementById("size").innerHTML=value;
+        }
+        function Preview(v){
+            document.getElementById('Previewitems').innerHTML="";
+            let div=document.createElement('div');
+            div.className="container-fluid d-flex";
+            for(var i=0;i<list1.length;i++){
+                if(v===i){
+                    div.innerHTML=`
+                        <div>
+                            <iframe scrolling="no" name="flamebody" src="${list1[i].image}">
+                                <div></div>
+                            </iframe>
+                        </div>
+                        <div class="m-3">
+                            <div>
+                                <h3>${list1[i].title}</h3>
+                            </div>
+                            <div class="d-flex">
+                                <span><h4>${list1[i].price}</h4></span>
+                                <span class="m-1">&#40;In Stock&#41;</span>
+                            </div>
+                            <div style="margin-top: 30px;">
+                                <p>Color:<strong>${list1[i].color}</strong></p>
+                            </div>
+                            <div class="mt-3">
+                                <span>
+                                    <a href="${list1[i].image}" target="flamebody">
+                                        <img src="${list1[i].image}" alt="refersh agaian" width="100px" height="100px">
+                                    </a>
+                                </span>
+                                <span>
+                                    <a href="${list1[i].image2}" target="flamebody">
+                                        <img src="${list1[i].image2}" width="100px" height="100px">
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="mt-3">
+                            <p>Size: <span id="size"></span> <strong>US</strong></p>
+                        </div>
+                        <div class="flex-wrap" >
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeone" value="6" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizeone">6</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizetwo" value="6" disabled>
+                                <label class="btn btn-outline-dark" for="modalproductsizetwo">6.5</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizethree" value="7" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizethree">7</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizefour" value="7.5" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizefour">7.5</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizefive" value="8" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizefive">8</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizesix" value="8.5" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizesix">8.5</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeseven" value="9" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizeseven">9</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeeight" value="9.5" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizeeight">9.5</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizenine" value="10" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizenine">10</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeten" value="10.5" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizeten">10.5</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeellven" value="11" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizeellven">11</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizetwelve" value="11.5" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsizetwelve">11.5</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsize13" value="12" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsize13">12</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-size">
+                                <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsize14" value="13" onclick="fastsize(this.value)">
+                                <label class="btn btn-outline-dark" for="modalproductsize14">13</label>
+                            </div>
+                        </div>
+                        <div class="mt-4 d-flex">
+                            <div class="m-2">
+                                <select class="dropdown" style="font-size: 20px; padding: 10px;">
+                                    <optgroup class="dropdown-item">
+                                        <option value="1" class="dropdown-item-text">1</option>
+                                        <option value="1" class="dropdown-item-text">2</option>
+                                        <option value="1" class="dropdown-item-text">3</option>
+                                        <option value="1" class="dropdown-item-text">4</option>
+                                        <option value="1" class="dropdown-item-text">5</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="m-2">
+                                <button class="btn bg-dark text-white" onclick="addtoclick(${i})" style="font-size: large; padding: 10px; width: 200px;"> Add to Cart <span class="bi bi-cart"></span></button>
+                            </div>
+                            <div class="m-2">
+                                <button class="btn btn-outline-dark " onclick="clicktowish(${i})" style="font-size: large; padding: 10px; width: 150px;">Wishlist <span class="bi bi-heart"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-2">
+                        <span class="btn btn-close" data-bs-dismiss="modal"></span>
+                    </div>
+                    </div>
+                    `;
+                }
+                else{
+                    continue;
+                }
+            }
+            document.getElementById('Previewitems').appendChild(div);
+        }
+        /*function LoadCategories(){
+            fetch('https://fakestoreapi.com/products/categories')
+            .then(function(res){
+                return res.json();
+            })
+            .then(function(categories){
+                categories.unshift('all');
+                categories.map(function(category){
+                    var option =document.createElement('option');
+                    option.text=category.toUpperCase();
+                    option.value=category;
+                    document.getElementById('1stcategory').appendChild(option);
+                })
+            })
+        }
+        function loadproducts(url){
+            document.querySelector("main").innerHTML="";
+            fetch(url)
+            .then(function(res){
+               return res.json();
+            })
+            .then(function(products){
+                products.map(function(product){
+                    let div= document.createElement("div");
+                    div.className="card m-2 p-2";
+                    div.style.width="200px";
+                    div.innerHTML=`
+                    <img src=${product.image} class="card-img-top" height="140px">
+                    <div class="card-header overflow-auto" style="height:100px">
+                        <p>${product.title}</p>
+                    </div>
+                    <div class="card-body">
+                        <dl>
+                            <dt>Price</dt>
+                            <dd>${product.price}</dd>
+                            <dt>Rating</dt>
+                            <dd>${product.rating.rate}<span class="bi bi-star-fill text-gold"></span>[${product.rating.count}]</dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <button onclick="AddClick(${product.id})" class="btn btn-danger w-100">
+                            <span class="bi bi-cart4"></span>Add to Card
+                        </button>
+                    </div>
+                    `;
+                    document.querySelector('main').appendChild(div);
+                })
+            })
+        }*/
+        var list1=[
+            {"image":"../public/images/Leather%20mid-heel%20Sandals.jpg","color":"Brown","image2":"./public/images/Leather mid-heel Sandals1.jpg","desc":"Shoes","title":"Leather mid-heel Sandals","price":"$129.00"},
+            {"desc":"Dresses","title":"Cotton floral print Dress","color":"Pink","image2":"./public/images/product-6.jpg","price":"$40.00","image":"./public/images/dress.jpg",},
+            {"desc":"Tops","image":"./public/images/shoes.jpg","color":"Blue","image2":"./public/images/product-122.jpg","title":"Leather Sneakers","price":"$85.00"},
+            {"desc":"Shoes","image":"../public/images/tops.jpg","color":"White","image2":"./public/images/tops2.jpg","title":"Cropped cotton Top","price":"$29.00"},
+            {"image":"../public/images/dresses.jpg","color":"Yellow","image2":"./public/images/dresses2.jpg","desc":"Dresses","title":"Floral print midi Dress","price":"$50.00"},
+            {"image":"../public/images/bags.jpg","color":"Brown","image2":"./public/images/product-123.jpg","desc":"Bags","title":"Suede cross body Bag","price":"$49.00"},
+            {"image":"../public/images/skirts.jpg","color":"White-Black","image2":"./public/images/product-124.jpg","desc":"Skirts","title":"Printed A-line Skirt","price":"$79.00"},
+            {"image":"../public/images/shoes2.jpg","color":"Brown","image2":"./public/images/shoes2-1.jpg","desc":"Shoes","title":"Heel strappy Sandals","price":"$90.00"}
+        ];
+        function displaynonedown(x){
+            switch(x){
+                case 1:
+                    document.getElementById('ds').style='display:none;';
+                    break;
+                case 2:
+                     document.getElementById('catlog').style='display:none';
+                     break;
+                case 3:
+                    document.getElementById('pages').style='display:none';
+                    break;
+                case 4:
+                    document.getElementById('blog').style='display:none';
+                    break;
+                default:
+                    document.getElementById('ds').style='display:none;';
+                    document.getElementById('catlog').style='display:none';
+                    document.getElementById('pages').style='display:none';
+                    document.getElementById('blog').style='display:none';
+            }
+        }
+        function displaydropdown(y){
+            switch(y){
+                case 1:
+                     document.getElementById('ds').style='display:block; position:absolute; top:60px;';
+                     break;
+                case 2:
+                    document.getElementById('catlog').style='position:absolute; top:60px; left:0px; display:block;'; 
+                    break;
+                case 3:
+                    document.getElementById('pages').style='display:block; position:absolute; top:60px;'; 
+                    break;
+                case 4:
+                    document.getElementById('blog').style='display:block; position:absolute; top:60px;';
+                    break;
+            }
+        }
+        function addside(cp){
+            if(cp===1)
+            {
+                document.getElementById('coverwomen').style="margin-left:4px;";
+            }
+            else if(cp===2){
+                document.getElementById('covermen').style="margin-left:4px;";
+            }
+            else if(cp===3){
+                document.getElementById('coverkids').style="margin-left:4px;";
+            }
+            else {
+                document.getElementById('ra').style="margin-left:4px;";
+            }
+        }
+        function lessside(cp){
+            if(cp===1){
+                document.getElementById('coverwomen').style="margin-left:-4px;";
+            }
+            else if(cp===2){
+                document.getElementById('covermen').style="margin-left:-4px;";
+            }
+            else if(cp===3){
+                document.getElementById('coverkids').style="margin-left:-4px;";
+            }
+            else{
+                 document.getElementById('ra').style='margin-left:-4px;';
+            }
+        }
+        function timeki(){
+            setInterval(gettime1,1000);
+        }
+        /*function Categorychanged(){
+            var categoryname=document.getElementById('1stcategory').value;
+            if(categoryname=="all"){
+                loadproducts('http://fakestoreapi.com/products');
+            }
+            else{
+                loadproducts(`http://fakestoreapi.com/products/category/${categoryname}`);
+            }
+        }
+        */
+        var cartitems=[];//inside values of cart which added by user
+        function getcartcount(i){
+            if(i===0){
+                var cartlen=localStorage.getItem('cardnumber');
+                document.getElementById('cartid').innerText=cartlen;
+                if(cartlen==0){
+                    cartclick();
+                }
+                else{
+                    AddClick();
+                }
+            }
+            else{
+                document.getElementById('cartid').innerText=cartitems.length;
+            }
+        }
+        function AddClick(){
+            var id=[];
+            id.push(localStorage.getItem('cartpr'));
+            var res=id[0].split(',');
+            for(var i=0;i<res.length;i++){
+                fetch(`http://fakestoreapi.com/products/${res[i]}`)
+                .then(function(res){
+                    return res.json();
+                })
+                .then(function(product){
+                    cartitems.push(product);
+                })
+            }
+        }
+        function popclick(js){
+            console.log(js);
+            cartitems.splice(js,1);
+            cartclick();
+            getcartcount(1);
+        }
+        function addtoclick(index){
+            for(let i=0;i<list1.length;i++){
+                if(index===i){
+                    cartitems.push(list1[i]);
+                    cartclick();
+                    getcartcount(1);
+                }
+                else{
+                    continue;
+                }
+            }
+        }
+        const wishlist=new Set();
+        function clicktowish(index){
+            for(let i=0;i<list1.length;i++){
+                if(index===i){
+                    wishlist.add(list1[i]);
+                    console.log(wishlist);
+                }
+                else{
+                    continue;
+                }
+            }
+        }
+        function popwishlist(index){
+            wishlist.forEach((point)=>{
+                if(point.title===index){
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function movetocart(indes){
+            wishlist.forEach((point)=>{
+                if(point.title===indes){
+                    cartitems.push(point);
+                    getcartcount(1);
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function clicktowishing(){
+            document.getElementById('wishinglistoffcanves').innerHTML="";
+            const iterator=wishlist.values();
+            wishlist.forEach(function(product){
+                let div=document.createElement('div');
+                div.className="container-fluid d-flex m-2";
+                div.innerHTML=`
+                    <div><img src="${product.image}" width="150px" height="200px"></div>
+                    <div class="m-2"> 
+                        <h5>${product.title}</h5>
+                        <h4>${product.desc}</h4>
+                        <h6 class="text-muted">${product.price}</h6>
+                        <span class="btn btn-outline-dark bi bi-trash mt-1" onclick="popwishlist('${product.title}')"></span>
+                        <button class="btn btn-outline-dark" onclick="movetocart('${product.title}')">Move To Cart</button>
+                    </div>
+                `;
+                document.getElementById('wishinglistoffcanves').appendChild(div);
+
+            })
+        }
+        function goingto(){
+            
+        }
+        function cartclick(){
+            if(cartitems.length!==0){
+                document.querySelector('tbody').innerHTML="";
+                cartitems.map(function(product){
+                    var tr=document.createElement('tr');
+                    var tdTitle=document.createElement('td');
+                    var tdpreview=document.createElement('td');
+                    var tdprice=document.createElement('td');
+                    var tdcross=document.createElement('td');
+                    tdTitle.innerHTML=product.title;
+                    tdpreview.innerHTML=`<img src=${product.image} width="50px" height="50px">`;
+                    tdprice.innerHTML=product.price;
+                    tdcross.innerHTML=`<button class="btn-close" onclick="popclick(${cartitems.indexOf(product)})"></button>`;
+                    tr.appendChild(tdTitle);
+                    tr.appendChild(tdpreview);
+                    tr.appendChild(tdprice);
+                    tr.appendChild(tdcross);
+                    document.querySelector('tbody').appendChild(tr);
+                })
+            }
+            else{
+                document.querySelector("tbody").innerHTML=`<tr>
+                        <td>nothing added to cart</td>
+                    </tr>`;
+            }
+        }
+        function bodyload(){
+            //LoadCategories();
+            //loadproducts("https://fakestoreapi.com/products");
+            displaynonedown(0);
+            getcartcount(0);
+            //csa1();
+            timeki(); 
+        }
+    </script>
+</head>
+<body onload="bodyload()" class="container-fluid ">
+    <header>
+        <div class="navbar navbar-expand-lg text-dark bg-white">
+            <div class="container-fluid">
+                <div class="navbar-brand"><h2>Shopper.</h2></div>
+                <div class="naba">
+                    <ul class="navbar-nav navbar-collapse collapse" id="home">
+                        <li class="nav-item" onmouseover="displaydropdown(1)" onmouseout="displaynonedown(1)"><a class="nav-link"><h6>New & featuring</h6></a>
+                            <ul class="dropdown-menu card card-body" id="ds">
+                                <li class="dropdown-item-text"><a href="./searchpage.html">New Arrival</a></li>
+                                <li class="dropdown-item-text"><a>Best Seller</a></li>
+                                <li class="dropdown-item-text"><a>Latest Clothing</a></li>
+                                <li class="dropdown-item-text"><a>Latest Shoes</a></li>
+                                <li class="dropdown-item-text"><a>Exclusive</a></li>
+                                <li class="dropdown-item-text"><a>Customise</a></li>
+                            </ul>   
+                        </li>
+                        <li class="nav-item" onmouseover="displaydropdown(2)" onmouseout="displaynonedown(2)"><a class="nav-link"><h6>Catlog</h6></a>
+                            <div class="dropdown-menu card card-body w-100" id="catlog">
+                                <div class="border-top border-bottom mb-2">
+                                    <div class="container mt-2 mb-2">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <nav class="nav nav-tabs">
+                                                    <a class="nav-link text-uppercase active" data-bs-toggle="tab" href="#navtap">
+                                                        Women
+                                                    </a>
+                                                    <a class="nav-link text-uppercase" data-bs-toggle="tab" href="#navtap">
+                                                        Men
+                                                    </a>
+                                                    <a class="nav-link text-uppercase" data-bs-toggle="tab" href="#navtap">
+                                                        Kids
+                                                    </a>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="navtap">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-2 py-3">
+                                                    <!-- Heading -->
+                                                    <div class="mb-3 fw-bold">Clothing</div>
+                                                    <!-- Links -->
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Clothing</a></li>
+                                                        <li><a href="./searchpage.html">Blouses & Shirts</a></li>
+                                                        <li><a  href="./searchpage.html">Coats & Jackets</a></li>
+                                                        <li><a  href="./searchpage.html">Dresses</a></li>
+                                                        <li><a  href="./searchpage.html">Hoodies & Sweats</a></li>
+                                                        <li><a  href="./searchpage.html">Denim</a></li>
+                                                        <li><a  href="./searchpage.html">Jeans</a></li>
+                                                        <li><a  href="./searchpage.html">Jumpers & Cardigans</a></li>
+                                                        <li><a  href="./searchpage.html">Leggings</a></li>
+                                                    </ul>
+                                                </div>        
+                                                <div class="col-2 py-3">
+                                                    <div class="mb-3 fw-bold">Shoes & Boots</div>
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Shoes & Boots</a></li>
+                                                        <li><a href="./searchpage.html">Branded Shoes</a></li>
+                                                        <li><a href="./searchpage.html">Boots</a></li>
+                                                        <li><a href="./searchpage.html">Heels</a></li>
+                                                        <li><a href="./searchpage.html">Trainers</a></li>
+                                                        <li><a href="./searchpage.html">Sandals</a></li>
+                                                        <li><a href="./searchpage.html">Shoes</a></li>
+                                                        <li><a href="./searchpage.html">Wide Fit Shoes</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-2 py-3">
+                                                    <div class="mb-3 fw-bold">Bags & Accessories</div>
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Bags & Accessories</a></li>
+                                                        <li><a href="./searchpage.html">Accessories</a></li>
+                                                        <li><a href="./searchpage.html">Bags & Purses</a></li>
+                                                        <li><a href="./searchpage.html">Luggage</a></li>
+                                                        <li><a href="./searchpage.html">Belts</a></li>
+                                                        <li><a href="./searchpage.html">Hats</a></li>
+                                                        <li><a href="./searchpage.html">Hair Accessories</a></li>
+                                                        <li><a href="./searchpage.html">Jewellery</a></li>
+                                                        <li><a href="./searchpage.html">Travel Accessories</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-2 py-3">
+                                                    <div class="mb-3 fw-bold">Collections</div>
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Collections</a></li>
+                                                        <li><a href="./searchpage.html">Occasionwear</a></li>
+                                                        <li><a href="./searchpage.html">Going Out</a></li>
+                                                        <li><a href="./searchpage.html">Workwear</a></li>
+                                                        <li><a href="./searchpage.html">Holiday Shop</a></li>
+                                                        <li><a href="./searchpage.html">Jean Fit Guide</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-4 card align-items-center justify-content-center" id="op" onmouseover="addside(4)" onmouseout="lessside(4)" style="position: relative; background-size: cover; background-image: url('./public/images/product-110.jpg');">
+                                                    <div class="card-body" style="position: absolute;"><button class="btn btn-light btn-lg" type="button">Shop Sweaters <span id="ra" class="bi bi-arrow-right-short"></span></button></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item"><a class="nav-link"><h6>shop</h6></a></li>
+                        <li class="nav-item" onmouseover="displaydropdown(3)" onmouseout="displaynonedown(3)"><a class="nav-link"><h6>Pages</h6></a>
+                            <ul class="dropdown-menu card card-body" id="pages">
+                                <li class="dropdown-item-text"><a>About</a></li>
+                                <li class="dropdown-item-text"><a>Contact Us</a></li>
+                                <li class="dropdown-item-text"><a>Store Locator</a></li>
+                                <li class="dropdown-item-text"><a>FAQ</a></li>
+                                <li class="dropdown-item-text"><a>Coming Soon</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item" onmouseover="displaydropdown(4)" onmouseout="displaynonedown(4)"><a class="nav-link"><h6>Blog</h6></a>
+                            <div class="dropdown-menu card-body" id="blog">
+                                <ul class="list-unstyled dropdown-item">
+                                    <li class="dropdown-item-text"><a>Blog</a></li>
+                                    <li class="dropdown-item-text"><a>Blog Post</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="navbar-nav navbar-collapse collapse mb-2" id="home">
+                        <span class="bi bi-search me-3"></span>
+                        <a href="#wishlist" data-bs-toggle="offcanvas" onclick="clicktowishing()"><span class="bi bi-heart me-3"></span></a>
+                        <a href="#cart" onclick="cartclick()" data-bs-toggle="modal"><span class="bi bi-cart position-relative me-3"><span class="badge rounded rounded-circle bg-danger" style="position: absolute; top: -10px; left: 5px;" id="cartid"></span></span></a>
+                        <a data-bs-target="#login" data-bs-toggle="modal"><span class="border rounded-2 border-1 bg-warning p-2 me-3" id="lgsg">login/signin</span></a><!--this is inter document link where it actually goes to another page from this page to login page-->
+                    </div>
+                </div>
+            </div>
+            <button class="navbar-toggler" data-bs-target="#home" data-bs-toggle="collapse">
+                <span class="navbar-toggler-icon"></span>
+            </button> 
+        </div>
+    </header>
+    <div class="d-flex justify-content-center bg-black p-1" style="color: gold;">
+        <span class="bi bi-lightning-fill mt-3"></span>
+        <span class="mt-3" style="color: white;"><b><p>HAPPY HOLIDAY DEALS ON EVERYTHING</p></b></span>
+        <span class="bi bi-lightning-fill mt-3"></span>
+    </div>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="wishlist">
+        <div class="offcanvas-header border-bottom">
+            <h2 class="offcanvas-title">Wishlist</h2>
+            <button class="btn btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body m-2" >
+            <div id="wishinglistoffcanves">
+
+            </div>
+        </div>
+    </div>
+    <!--<section class="mt-3 row">
+        <nav class="col-2">
+            <label class="form-label fw-bold">Select categories</label>
+            <div>
+                <select onchange="Categorychanged()" id="1stcategory" class="form-select">
+                    
+                </select>
+            </div>
+        </nav>
+        <main class="col-1 d-flex flex-wrap overflow-auto" style="width: 1200px;">
+
+        </main>
+    </section>-->
+    
+    <div class="modal fade" id="cart">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-primary">Your cart items<span class="bi bi-cart-check-fill"></span></h2>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Head</th>
+                                <th>Preview</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="login">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 ><span class="bi bi-person"></span>User Login</h2>
+                    <button data-bs-dismiss="modal" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        <dt class="form-text">User Name</dt>
+                        <dd><input type="text" class="form-control"></dd>
+                        <dt class="form-text">Password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dd style="text-align: center;"><a class="link-dark" href="#signin" data-bs-toggle="modal">
+                                New to Buy it ? Register here
+                        </a></dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" >Login</button>
+                    <button data-bs-dismiss="modal" class="btn btn-danger">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="signin">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="bi bi-person"></span>User Register</h2>
+                    <button data-bs-dismiss="modal" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        <dt class="form-text">Email Id</dt>
+                        <dd><input type="email" class="form-control"></dd>
+                        <dt class="form-text">Password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dt class="form-text">Confirm password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dt class="form-text">Phone Number</dt>
+                        <dd><input type="text" class="form-control"></dd>
+                        <dt class="form-text">Gender</dt>
+                        <dd>
+                            <input type="radio" class="form-check-input" id="male" name="gender">
+                            <label for="male" class="form-check-label">Male</label>
+                            <input type="radio" class="form-check-input" id="female" name="gender">
+                            <label for="female" class="form-check-label">Female</label>
+                            <input type="radio" class="form-check-input" id="others" name="gender">
+                            <label for="others" class="form-check-label">Others</label>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Register</button>
+                    <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <a href="./searchpage.html">
+            <div class="row py-4" style="height: 500px;">
+                <div class="col-4" style="background-image: url(./public/images/women.jpg); background-size: cover;" name="cover1" onmouseover="addside(1)" onmouseout="lessside(1)" >
+                    <div class="d-flex justify-content-center align-items-center" style="height: 400px;"><h1 class="text-white">Women</h1></div>
+                    <div class="d-flex justify-content-center" style="margin: 10px;"><button class="btn btn-light btn-lg">Shop women <span id="coverwomen" class="bi bi-arrow-right-short"></span></button></div>
+                </div>
+                <div class="col-4" style="background-image: url(./public/images/menshop.jpg); background-size: cover;" name="cover1" onmouseover="addside(2)" onmouseout="lessside(2)">
+                    <div class="d-flex justify-content-center align-items-center" style="height: 400px;"><h1 class="text-white">Men</h1></div>
+                    <div class="d-flex justify-content-center" style="margin: 10px;"><button class="btn btn-light btn-lg">Shop Men <span id="covermen" class="bi bi-arrow-right-short"></span></button></div>
+                </div>
+                <div class="col-4" style="background-image: url(./public/images/upwk61775055-wikimedia-image.jpg); background-size: cover;" name="cover1" onmouseover="addside(3)" onmouseout="lessside(3)">
+                    <div class="d-flex justify-content-center align-items-center" style="height: 400px;"><h1 class="text-white">Kids</h1></div>
+                    <div class="d-flex justify-content-center" style="margin: 10px;"><button class="btn btn-light btn-lg">Shop Kids <span  id="coverkids" class="bi bi-arrow-right-short"></span></button></div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="d-flex justify-content-around border-bottom" style="margin: 20px 200px 0px 200px;">
+        <div class="mb-3">
+            <div class="d-sm-flex">
+                <span class="bi bi-truck text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">FREE SHOPPING</span>
+            </div>
+            <div class="ms-4" style="color: grey;">From all orders over $100</div>
+        </div>
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-arrow-left-right text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">FREE SHOPPING</span>
+            </div>
+            <div class="ms-4" style="color: grey;">Return money within 30 days</div>
+        </div>
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-lock text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">SECURE SHOPPING</span>
+            </div>
+            <div class="ms-4" style="color: grey;">You're in safe hands</div>
+        </div>
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-tag text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">OVER 10,000 STYLES</span>
+            </div>
+            <div class="ms-4" style="color: grey;">We have everything you need</div>
+        </div>
+    </div>
+    <div class="container-fluid d-flex flex-column align-items-center" style="margin-top: 100px;">
+        <h6 style="color: grey;">NEW COLLECTION</h6>
+        <h1>Best Picks 2019</h1>
+        <p style="color: grey;">Appear, dry there darkness they're seas, dry waters thing fly midst. Beast,</p>
+        <p style="color: grey; margin-top: -20px;">above fly brought Very green.</p>
+    </div>
+    <div class="container-fluid">
+        <div class="row py-4" style="height: 1000px; display: flex; justify-content: center;" >
+            <a name="banner" class="col-3 me-4 d-flex flex-column justify-content-center align-items-center mb-4" style="background-image: url(./public/images/fashion-products-bag-handbag.jpg); background-size: cover;" href="./searchpage.html" >
+                <div class="text-white fs-3 fw-bold">Bags Collection</div>
+                <div class="text-white fs-4">shop now <span class="bi bi-arrow-right"></span></div>
+            </a>
+            <a name="banner" class="col-6 d-flex flex-column justify-content-center position-relative mb-4" style="background-image: url(./public/images/shirt-hanger-clothing-clothe.jpg); background-size: cover;" href="./searchpage.html" >
+                <div class="text-white fs-3 fw-bold" >Printed men's shirts</div>
+                <div class="text-white fs-4">shop now <span  class="bi bi-arrow-right"></span></div>
+                <div class="badge bg-danger rounded-circle" style="height: 100px; width: 100px; display: flex; flex-direction: column; justify-content: center; position: absolute; top: 10px; right: 10px;">
+                    <div class="fs-5 mb-2">save</div>
+                    <div class="fs-2">30%</div>
+                </div>
+            </a>
+            <a name="banner" class="col-6 me-4 d-flex flex-column justify-content-center" style="background-image: url(./public/images/20-25-year-old-adult-bag-carrying.jpg); background-size: cover;" href="./searchpage.html" >
+                <div class="text-white fs-3 fw-bold">Basic Women's Dresses</div>
+                <div class="text-white fs-4">shop now <span  class="bi bi-arrow-right"></span></div>
+            </a>
+            <a name="banner" class="col-3 d-flex flex-column justify-content-center align-items-center" style="background-image: url(./public/images/wool-sweater-men.jpg); background-size: cover;" href="./searchpage.html" >
+                <div class="text-white fs-3 fw-bold">Sweatshirts</div>
+                <div class="text-white fs-4">shop now <span  class="bi bi-arrow-right"></span></div>
+            </a>
+        </div>
+    </div>
+    <div class="container d-flex flex-column" style="text-align: center; margin-top: 100px;">
+        <div><h1>Top month Seller</h1></div>
+        <div class="nav nav-pills justify-content-center mt-2 d-flex" id="raj">
+            <a class="nav-link active" href="#topSellersTab" data-bs-toggle="tab">Women</a>
+            <a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">Men</a>
+            <a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">Kids</a>
+        </div>
+    </div>
+    <div class="container-fluid mt-5">
+        <div class="tab-content">
+            <div class="tab-pane show fade active" id="topSellersTab">
+                <div class="d-flex flex-wrap justify-content-center text-muted">
+                    <div class="me-5 ms-2 mb-3">
+                        <div style="position: relative; background-image: url(./public/images/Leather\ mid-heel\ Sandals.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
+                            <div class="badge bg-white text-dark" style="position: absolute; top: 22px; left: -1px;">New</div>
+                            <div style="position: relative; background-image: url(./public/images/Leather\ mid-heel\ Sandals1.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                                <div class="badge bg-white text-dark" style="position: absolute; top: 22px; left: -1px;">New</div>
+                                <a href="#dials" onclick="Preview(0)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                <a onclick="addtoclick(0)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                <a onclick="clicktowish(0)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                            </div>
+                        </div>
+                        <div>Shoes</div>
+                        <div style="color:black"><b>Leather mid-heel Sandals</b></div>
+                        <div><b>$129.00</b></div>
+                    </div>
+                    <div class="me-5 ms-2 mb-3">
+                        <div style="position: relative; background-image: url(./public/images/dress.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
+                            <div style="background-image: url(./public/images/product-6.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                                <a href="#dials" onclick="Preview(1)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                <a onclick="addtoclick(1)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                <a onclick="clicktowish(1)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                            </div>
+                        </div>
+                        <div>Dresses</div>
+                        <div style="color:black"><b>Cotton floral print Dress</b></div>
+                        <div><b>$40.00</b></div>
+                    </div>
+                    <div class="me-5 ms-2 mb-3">
+                        <div style="position: relative; background-image: url(./public/images/shoes.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
+                            <div style="background-image: url(./public/images/product-122.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                                <a href="#dials" onclick="Preview(2)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                <a onclick="addtoclick(2)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                <a onclick="clicktowish(2)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                            </div>
+                        </div>
+                        <div>Shoes</div>
+                        <div style="color:black"><b>Leather Sneakers</b></div>
+                        <div><b><strike class="text-danger me-1">$85.00</strike>$40.00</b></div>
+                    </div>
+                    <div class="me-5 ms-2 mb-3">
+                        <div style="position: relative; background-image: url(./public/images/tops.jpg); background-size: cover; height: 270px; width: 240px;" name="r5">
+                            <a href="#dials" onclick="Preview(3)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r4"><span class="bi-eye text-dark"></span></div></a>
+                            <a onclick="addtoclick(3)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r4"><span class="bi-cart text-dark"></span></div></a>
+                            <a onclick="clicktowish(3)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r4"><span class="bi-heart text-dark"></span></div></a>
+                        </div>
+                        <div>Tops</div>
+                        <div style="color:black"><b>Cropped cotton Top</b></div>
+                        <div><b>$29.00</b></div>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap justify-content-center text-muted">
+                    <div class="me-5 ms-2 mb-3">
+                        <div style="position: relative; background-image: url(./public/images/dresses.jpg); background-size: cover; height: 270px; width: 240px;" name="r5">
+                            <a href="#dials" onclick="Preview(4)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r4"><span class="bi-eye text-dark"></span></div></a>
+                            <a onclick="addtoclick(4)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r4"><span class="bi-cart text-dark"></span></div></a>
+                            <a onclick="clicktowish(4)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r4"><span class="bi-heart text-dark"></span></div></a>
+                        </div>
+                        <div>Dresses</div>
+                        <div style="color:black"><b>Floral print midi Dress</b></div>
+                        <div><b>$50.00</b></div>
+                    </div>
+                    <div class="me-5 ms-2 mb-3">
+                        <div style="position: relative; background-image: url(./public/images/bags.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
+                            <div style="background-image: url(./public/images/product-123.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                                <a href="#dials" onclick="Preview(5)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                <a onclick="addtoclick(5)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                <a onclick="clicktowish(5)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                            </div>
+                        </div>
+                        <div>Bags</div>
+                        <div style="color:black"><b>Suede cross body Bag</b></div>
+                        <div><b><strike class="text-danger me-1">$79.00</strike>$49.00</b></div>
+                    </div>
+                    <div class="me-5 ms-2 mb-3">
+                        <div style="position: relative; background-image: url(./public/images/skirts.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
+                            <div style="background-image: url(./public/images/product-124.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                                <a href="#dials" onclick="Preview(6)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                <a onclick="addtoclick(6)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                <a onclick="clicktowish(6)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                            </div>
+                        </div>
+                        <div>Skirts</div>
+                        <div style="color:black"><b>Printed A-line Skirt</b></div>
+                        <div><b>$79.00</b></div>
+                    </div>
+                    <div class="me-5 ms-2 mb-3">
+                        <div style="position: relative; background-image: url(./public/images/shoes2.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
+                            <div class="badge bg-white text-dark" style="position: absolute; top: 22px; left: -1px;">New</div>
+                            <div style="position: relative; background-image: url(./public/images/shoes2.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                                <div class="badge bg-white text-dark" style="position: absolute; top: 22px; left: -1px;">New</div>
+                                <a href="#dials" onclick="Preview(7)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                <a onclick="addtoclick(7)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                <a onclick="clicktowish(7)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                            </div>
+                        </div>
+                        <div>Shoes</div>
+                        <div style="color:black"><b>Heel strappy Sandals</b></div>
+                        <div><b>$90.00</b></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mt-lg-5 mb-5" id="usnder">
+        <h6>Discover more</h6>
+    </div>
+    <div class="mb-5" style="background-image: url(./public/images/cover-4.jpg); height: 600px; position: relative;">
+        <h1 style="position: absolute; top: 150px; right: 350px;">Get -50% from<br> Summer Collection</h1>
+        <div style="color: rosybrown; display: flex; position: absolute; top: 250px; right: 300px; font-size: 50px;">
+            <div class="m-3">
+                <div id="day"></div>
+                <div><h5>Days</h5></div>
+            </div>
+            <div class="m-3">
+                <div id="time"></div>
+                <div><h5>Hours</h5></div>
+            </div>
+            <div class="m-3">
+                <div id="minu"></div>
+                <div><h5>Minutes</h5></div>
+            </div>
+            <div class="m-3">
+                <div id="seco"></div>
+                <div><h5>Seconds</h5></div>
+            </div>
+        </div>
+        <button class="bg-black text-white fs-4 py-2" onclick="location.href='./searchpage.html'" style="width: 200px; position: absolute; top: 390px; right: 490px;" id="btn3">shop now<span  class="bi bi-arrow-right-short"></span></button>
+    </div>
+    <div class="d-flex flex-column" style="text-align: center;">
+        <h6 style="color: grey;">WHAT BUYERS SAY</h6>
+        <h1>Latest Buyers Reviews</h1>
+    </div>
+    <div class="py-xxl-5 m-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div data-flickity='{"wrapAround": true}'>
+                        <div class="col-12 col-sm-8 col-md-4 col-lg-4 px-4">
+                            <div class="card-lg card border">
+                                <div class="card-body">
+                                    <div class="row align-items-center mb-5">
+                                        <div class="col-4">
+                                            <img src="./public/images/smallshoe.jpg" alt="" class="img-fluid">
+                                        </div>
+                                        <div class="col-8 ms-n2">
+                                            <a class="fs-xs text-muted" href="./searchpage.html">shoes</a>
+                                            <a class="d-block fw-bold text-body" href="./searchpage.html">Low top Sneakers</a>
+                                            <div class="fs-xss text-warning">
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <blockquote class="mb-0">
+                                        <p class="text-muted">
+                                            From creepeth said moved given divide make multiply of him shall itself also above second doesn't unto created saying land herb sea midst night wherein.
+                                        </p>
+                                        <footer class="fs-xs text-muted">
+                                            Logan Edwards, <time>23-02-2020</time> 
+                                        </footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-8 col-md-4 col-lg-4 px-4">
+                            <div class="card-lg card border">
+                                <div class="card-body">
+                                    <div class="row align-items-center mb-5">
+                                        <div class="col-4">
+                                            <img src="./public/images/dressessmall.jpg" alt="" class="img-fluid">
+                                        </div>
+                                        <div class="col-8 ms-n2">
+                                            <a class="fs-xs text-muted" href="./searchpage.html">Dresses</a>
+                                            <a class="d-block fw-bold text-body" href="./searchpage.html">Cotton print Dress</a>
+                                            <div class="fs-xss text-warning">
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star"></span>
+                                                <span class="bi bi-star"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <blockquote class="mb-0">
+                                        <p class="text-muted">
+                                            God every fill great replenish darkness unto. Very open. Likeness their that light. Given under image to. Subdue of shall cattle day fish form saw spirit and given stars, us you whales may, land, saw fill unto.
+                                        </p>
+                                        <footer class="fs-xs text-muted">
+                                            Jane Jefferson, <time datetime="2019-05-29">29 May 2019</time>
+                                        </footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-8 col-md-4 col-lg-4 px-4">
+                            <div class="card-lg card border">
+                                <div class="card-body">
+                                    <div class="row align-items-center mb-5">
+                                        <div class="col-4">
+                                            <img src="./public/images/t-shirtssmall.jpg" alt="" class="img-fluid">
+                                        </div>
+                                        <div class="col-8 ms-n2">
+                                            <a class="fs-xs text-muted" href="./searchpage.html">T-shirts</a>
+                                            <a class="d-block fw-bold text-body" href="./searchpage.html">Oversized print T-shirt</a>
+                                            <div class="fs-xss text-warning">
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <blockquote class="mb-0">
+                                        <p class="text-muted">
+                                            Fill his waters wherein signs likeness waters. Second light gathered appear sixth fourth, seasons behold creeping female.
+                                        </p>
+                                        <footer class="fs-xs text-muted">
+                                            Darrell Baker, <time datetime="2019-05-18">18 May 2019</time>
+                                        </footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-8 col-md-4 col-lg-4 px-4">
+                            <div class="card-lg card border">
+                                <div class="card-body">
+                                    <div class="row align-items-center mb-5">
+                                        <div class="col-4">
+                                            <img src="./public/images/bags.jpg" alt="" class="img-fluid">
+                                        </div>
+                                        <div class="col-8 ms-n2">
+                                            <a class="fs-xs text-muted" href="./searchpage.html">Bags & Accessories</a>
+                                            <a class="d-block fw-bold text-body" href="./searchpage.html">Suede cross body Bag</a>
+                                            <div class="fs-xss text-warning">
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star-fill"></span>
+                                                <span class="bi bi-star"></span>
+                                                <span class="bi bi-star"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <blockquote class="mb-0">
+                                        <p class="text-muted">
+                                            God every fill great replenish darkness unto. Very open. Likeness their that light. Given under image to. Subdue of shall cattle day fish form saw spirit and given stars.
+                                        </p>
+                                        <footer class="fs-xs text-muted">
+                                            Pavel Doe, <time datetime="2019-05-29">29 May 2019</time>
+                                        </footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>              
+        </div>
+    </div>
+    <section class="container-fluid d-flex flex-column flex-wrap justify-content-center align-items-center" style="height: 500px; width: auto; background-color: rgb(240, 240, 240);">
+        <h1>@shopper</h1>
+        <h6 class="text-muted m-3">Appear, dry there darkness they're seas, dry waters.</h6>
+        <div class="container-fluid d-flex justify-content-center mb-4" id="rd">
+            <div style="background-image: url(./public/images/mango.jpg); background-size: cover; width: 170px; height: 170px;"><div  style="position: relative; margin: -1px; width: 170px; height: 170px; background-color: rgba(0, 0, 0, 0.4);">
+                <span class="bi bi-heart" style="position: absolute; top: 70px; left: 40px;"></span>
+                <span style="position: absolute; top: 70px; left: 60px;">273</span>
+                <span class="bi-chat-left" style="position: absolute; top: 70px; left: 90px;"></span>
+                <span style="position: absolute; top: 70px; right: 50px;">7</span>
+            </div></div>
+            <div style="background-image: url(./public/images/rebook.jpg); background-size: cover; width: 170px; height: 170px;"><div style="position: relative;  margin: -1px; width: 170px; height: 170px; background-color: rgba(0, 0, 0, 0.4);">
+                <span class="bi bi-heart" style="position: absolute; top: 70px; left: 40px;"></span>
+                <span style="position: absolute; top: 70px; left: 60px;">273</span>
+                <span class="bi-chat-left" style="position: absolute; top: 70px; left: 90px;"></span>
+                <span style="position: absolute; top: 70px; right: 50px;">7</span>
+            </div></div>
+            <div style="background-image: url(./public/images/zara.jpg); background-size: cover; width: 170px; height: 170px;"><div style="position: relative;  margin: -1px; width: 170px; height: 170px; background-color: rgba(0, 0, 0, 0.4);">
+                <span class="bi bi-heart" style="position: absolute; top: 70px; left: 40px;"></span>
+                <span style="position: absolute; top: 70px; left: 60px;">273</span>
+                <span class="bi-chat-left" style="position: absolute; top: 70px; left: 90px;"></span>
+                <span style="position: absolute; top: 70px; right: 50px;">7</span>
+            </div></div>
+            <div style="background-image: url(./public/images/asos.jpg); background-size: cover; width: 170px; height: 170px;"><div  style="position: relative;  margin: -1px; width: 170px; height: 170px; background-color: rgba(0, 0, 0, 0.4);">
+                <span class="bi bi-heart" style="position: absolute; top: 70px; left: 40px;"></span>
+                <span style="position: absolute; top: 70px; left: 60px;">273</span>
+                <span class="bi-chat-left" style="position: absolute; top: 70px; left: 90px;"></span>
+                <span style="position: absolute; top: 70px; right: 50px;">7</span>
+            </div></div>
+            <div style="background-image: url(./public/images/adidas.jpg); background-size: cover; width: 170px; height: 170px;"><div style="position: relative;  margin: -1px; width: 170px; height: 170px; background-color: rgba(0, 0, 0, 0.4);">
+                <span class="bi bi-heart" style="position: absolute; top: 70px; left: 40px;"></span>
+                <span style="position: absolute; top: 70px; left: 60px;">273</span>
+                <span class="bi-chat-left" style="position: absolute; top: 70px; left: 90px;"></span>
+                <span style="position: absolute; top: 70px; right: 50px;">7</span>
+            </div></div>
+            <div style=" background-image: url(./public/images/breska.jpg); background-size: cover; width: 170px; height: 170px;"><div style="position: relative;  margin: -1px; width: 170px; height: 170px; background-color: rgba(0, 0, 0, 0.4);">
+                <span class="bi bi-heart" style="position: absolute; top: 70px; left: 40px;"></span>
+                <span style="position: absolute; top: 70px; left: 60px;">273</span>
+                <span class="bi-chat-left" style="position: absolute; top: 70px; left: 90px;"></span>
+                <span style="position: absolute; top: 70px; right: 50px;">7</span>
+            </div></div>
+        </div>
+        <div id="logoes" class="container me-4">
+            <span><img src="./public/images/mango.svg" alt="" width="100px"></span>
+            <span><img src="./public/images/zara.svg" alt="" ></span>
+            <span><img src="./public/images/reebok.svg" alt="" ></span>
+            <span><img src="./public/images/asos.svg" alt="" ></span>
+            <span><img src="./public/images/stradivarius.svg" alt="" ></span>
+            <span><img src="./public/images/adidas.svg" alt="" ></span>
+            <span><img src="./public/images/bershka.svg" alt="" ></span>
+        </div>
+    </section>
+    <div class="modal fade" id="dials">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content" style="width: auto;" id="Previewitems">
+                
+            </div>
+        </div>
+    </div>
+    <footer class="container-fluid bg-black" style="color: white; position: relative; width: auto;">
+        <div style="padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div class="m-4 fs-4">Want style Ideas and Treats?</div>
+            <div class="m-2 fs-5 d-flex">
+                <input class="text-bg-dark p-2 me-2" style="border-style: none; width: auto;" type="email" placeholder="Enter Email*">
+                <button class="text-white p-2" style="background-color: grey; border-style: none;">Subscribe</button>
+            </div>
+            <div class="d-flex flex-wrap m-5" style="color: grey; width: auto;">
+                <div>
+                    <h2 style="color: white;">Shopper.</h2>
+                    <div>
+                        <span class="bi bi-facebook"></span>
+                        <span class="bi bi-youtube"></span>
+                        <span class="bi bi-twitter"></span>
+                        <span class="bi bi-instagram"></span>
+                        <span class="bi bi-medium"></span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="ms-5" >
+                        <h6 style="color: white;">SUPPORT</h6>
+                        <div>Contact Us</div>
+                        <div>FAQs</div>
+                        <div>Size Guide</div>
+                        <div>Shipping &amp; Returns</div>
+                    </div>
+                    <div class="ms-5">
+                        <h6 style="color: white;">SHOP</h6>
+                        <div>Men's Shopping</div>
+                        <div>Women's Shopping</div>
+                        <div>Kids' Shopping</div>
+                        <div>Discounts</div>
+                    </div>
+                    <div class="ms-5">
+                        <h6 style="color: white;">COMPANY</h6>
+                        <div>Our Story</div>
+                        <div>Careers</div>
+                        <div>Terms &amp; Conditions</div>
+                        <div>Privacy &amp; Cookie policy</div>
+                    </div>
+                </div>
+                <div class="ms-5">
+                    <h6 style="color: white;">CONTACT</h6>
+                    <address>
+                        <div>1-202-555-0105</div>
+                        <div>1-202-555-0106</div>
+                        <div>help@shopper.com</div>
+                    </address>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap justify-content-between border-top">
+            <h6 style="color: grey;" class="m-2">© 2019 All rights reserved. Designed by Unvab.</h6>
+            <div class="m-2">
+                <img src="./public/images/Screenshot 2023-04-07 130144.jpg">
+            </div>
+        </div>
+    </footer>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+</body>
+</html>

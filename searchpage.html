@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.">
+    <title>shopper.</title>
+    <link rel="shortcut icon" href="./public/images.gif">
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        #quicklinks span{
+            margin-left: 15px;
+        }
+        li{
+            padding: 5px;
+        }
+        #ligh{
+            color: gold;  
+              
+        }
+        #ligh p{
+            color: white;
+        }
+        .naba{
+            margin-left: 90px;
+        }  
+        #home a{
+            color: black;
+        }
+        #home a:hover{
+            color: red;
+        }
+        #op:hover{
+            opacity: 0.8;
+        }
+    </style>
+    <script>
+        function LoadCategories(){
+            fetch('https://fakestoreapi.com/products/categories')
+            .then(function(res){
+                return res.json();
+            })
+            .then(function(categories){
+                categories.unshift('all');
+                categories.map(function(category){
+                    var option =document.createElement('option');
+                    option.text=category.toUpperCase();
+                    option.value=category;
+                    document.getElementById('1stcategory').appendChild(option);
+                })
+            })
+        } 
+        function loadproducts(url){
+            document.querySelector("main").innerHTML="";
+            fetch(url)
+            .then(function(res){
+               return res.json();
+            })
+            .then(function(products){
+                products.map(function(product){
+                    let div= document.createElement("div");
+                    div.className="card m-2 p-2";
+                    div.style.width="200px";
+                    div.innerHTML=`
+                    <img src=${product.image} class="card-img-top" height="140px">
+                    <div class="card-header overflow-auto" style="height:100px">
+                        <p>${product.title}</p>
+                    </div>
+                    <div class="card-body">
+                        <dl>
+                            <dt>Price</dt>
+                            <dd>${product.price}<span class="bi-currency-dollar"></span></dd>
+                            <dt>Rating</dt>
+                            <dd>${product.rating.rate}<span class="bi-star-fill ms-1" id="star"></span>[${product.rating.count}]</dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <button onclick="AddClick(${product.id})" class="btn btn-danger w-100">
+                            <span class="bi bi-cart4"></span>Add to Card
+                        </button>
+                    </div>
+                    `;
+                    document.querySelector('main').appendChild(div);
+                })
+            })
+        }
+        function loadstar(url){
+            document.getElementById("star").innerHTML="";
+            let span=document.createElement('span');
+            fetch(url)
+            .then(function(res){
+               return res.json();
+            })
+            .then(function(products){
+                products.map(function(product){
+                    console.log(product.price);
+                })
+            })
+        }
+        function displaynonedown(x){
+            switch(x){
+                case 1:
+                    document.getElementById('ds').style='display:none;';
+                    break;
+                case 2:
+                     document.getElementById('catlog').style='display:none';
+                     break;
+                case 3:
+                    document.getElementById('pages').style='display:none';
+                    break;
+                case 4:
+                    document.getElementById('blog').style='display:none';
+                    break;
+                default:
+                    document.getElementById('ds').style='display:none;';
+                    document.getElementById('catlog').style='display:none';
+                    document.getElementById('pages').style='display:none';
+                    document.getElementById('blog').style='display:none';
+            }
+        }
+        function displaydropdown(y){
+            switch(y){
+                case 1:
+                     document.getElementById('ds').style='display:block; position:absolute; top:60px;';
+                     break;
+                case 2:
+                    document.getElementById('catlog').style='position:absolute; top:60px; left:0px; display:block;'; 
+                    break;
+                case 3:
+                    document.getElementById('pages').style='display:block; position:absolute; top:60px;'; 
+                    break;
+                case 4:
+                    document.getElementById('blog').style='display:block; position:absolute; top:60px;';
+                    break;
+            }
+        }
+        function addside(){
+            document.getElementById('ra').style="margin-left:4px;";
+        }
+        function lessside(){
+            document.getElementById('ra').style='margin-left:-4px;';
+        }
+        function bodyload(){
+            displaynonedown();
+            LoadCategories();
+            loadproducts("https://fakestoreapi.com/products");
+            getcartcount();
+            //console.log("hello mowa");
+        }
+        function Categorychanged(){
+            var categoryname=document.getElementById('1stcategory').value;
+            if(categoryname=="all"){
+                loadproducts('http://fakestoreapi.com/products');
+            }
+            else{
+                loadproducts(`http://fakestoreapi.com/products/category/${categoryname}`);
+            }
+        }
+        var cartitems=[];//inside values of cart which added by user
+        function getcartcount(){
+            document.getElementById('cartCount').innerText=cartitems.length;
+            localStorage.setItem('cardnumber',cartitems.length);
+            var pr=[];
+            cartitems.map(function(product){
+                pr.push(product.id);
+            })
+            localStorage.setItem("cartpr",pr);
+            console.log(pr);
+        }
+        function AddClick(id){
+            fetch(`http://fakestoreapi.com/products/${id}`)
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(product){
+                cartitems.push(product);
+                alert(`${product.title}\n added to cart`);
+                getcartcount();
+            })
+        }
+        function popclick(js){
+            console.log(js);
+            cartitems.splice(js,1);
+            cartclick();
+            getcartcount(1);
+        }
+        // window.onload = function() {
+   
+        //  localStorage.setItem("cartNumber",cartitems.length);
+        // console.log("windows onload function is loaded");
+        // }
+        function cartclick(){
+            document.querySelector('tbody').innerHTML="";
+            cartitems.map(function(product){
+                var tr=document.createElement('tr');
+                var tdTitle=document.createElement('td');
+                var tdpreview=document.createElement('td');
+                var tdprice=document.createElement('td');
+                var tddelete=document.createElement('td');
+                tdTitle.innerHTML=product.title;
+                tdpreview.innerHTML=`<img src=${product.image} width="50px" height="50px">`;
+                tdprice.innerHTML=product.price;
+                tddelete.innerHTML=`<button class="btn btn-close" onclick="popclick(${cartitems.indexOf(product)})"></button>`;
+                tr.appendChild(tdTitle);
+                tr.appendChild(tdpreview);
+                tr.appendChild(tdprice);
+                tr.appendChild(tddelete);
+                document.querySelector('tbody').appendChild(tr);
+            })
+        }
+    </script>
+</head>
+<body onload="bodyload()" class="container-fluid ">
+    <div class="navbar navbar-expand-lg text-dark bg-white">
+        <div class="container-fluid">
+            <div class="navbar-brand"><a href="./index.html"><h2>Shopper.</h2></a></div>
+            <div class="naba">
+                <ul class="navbar-nav navbar-collapse collapse" id="home">
+                    <li class="nav-item" onmouseover="displaydropdown(1)" onmouseout="displaynonedown(1)"><a class="nav-link"><h6>New & featuring</h6></a>
+                        <ul class="dropdown-menu card card-body" id="ds">
+                            <li class="dropdown-item-text"><a>New Arrival</a></li>
+                            <li class="dropdown-item-text"><a>Best Seller</a></li>
+                            <li class="dropdown-item-text"><a>Latest Clothing</a></li>
+                            <li class="dropdown-item-text"><a>Latest Shoes</a></li>
+                            <li class="dropdown-item-text"><a>Exclusive</a></li>
+                            <li class="dropdown-item-text"><a>Customise</a></li>
+                        </ul>   
+                    </li>
+                    <li class="nav-item" onmouseover="displaydropdown(2)" onmouseout="displaynonedown(2)"><a class="nav-link"><h6>Catlog</h6></a>
+                        <div class="dropdown-menu card card-body w-100" id="catlog">
+                            <div class="border-top border-bottom mb-2">
+                                <div class="container mt-2 mb-2">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <nav class="nav nav-tabs">
+                                                <a class="nav-link text-uppercase active" data-bs-toggle="tab" href="#navtap">
+                                                    Women
+                                                </a>
+                                                <a class="nav-link text-uppercase" data-bs-toggle="tab" href="#navtap">
+                                                    Men
+                                                </a>
+                                                <a class="nav-link text-uppercase" data-bs-toggle="tab" href="#navtap">
+                                                    Kids
+                                                </a>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="navtap">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-2 py-3">
+                                                <!-- Heading -->
+                                                <div class="mb-3 fw-bold">Clothing</div>
+                                                <!-- Links -->
+                                                <ul class="list-unstyled fs-lg">
+                                                    <li><a href="#">All Clothing</a></li>
+                                                    <li><a href="#">Blouses & Shirts</a></li>
+                                                    <li><a  href="#">Coats & Jackets</a></li>
+                                                    <li><a  href="#">Dresses</a></li>
+                                                    <li><a  href="#">Hoodies & Sweats</a></li>
+                                                    <li><a  href="#">Denim</a></li>
+                                                    <li><a  href="#">Jeans</a></li>
+                                                    <li><a  href="#">Jumpers & Cardigans</a></li>
+                                                    <li><a  href="#">Leggings</a></li>
+                                                </ul>
+                                            </div>        
+                                            <div class="col-2 py-3">
+                                                <div class="mb-3 fw-bold">Shoes & Boots</div>
+                                                <ul class="list-unstyled fs-lg">
+                                                    <li><a href="#">All Shoes & Boots</a></li>
+                                                    <li><a href="#">Branded Shoes</a></li>
+                                                    <li><a href="#">Boots</a></li>
+                                                    <li><a href="#">Heels</a></li>
+                                                    <li><a href="#">Trainers</a></li>
+                                                    <li><a href="#">Sandals</a></li>
+                                                    <li><a href="#">Shoes</a></li>
+                                                    <li><a href="#">Wide Fit Shoes</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-2 py-3">
+                                                <div class="mb-3 fw-bold">Bags & Accessories</div>
+                                                <ul class="list-unstyled fs-lg">
+                                                    <li><a href="#">All Bags & Accessories</a></li>
+                                                    <li><a href="#">Accessories</a></li>
+                                                    <li><a href="#">Bags & Purses</a></li>
+                                                    <li><a href="#">Luggage</a></li>
+                                                    <li><a href="#">Belts</a></li>
+                                                    <li><a href="#">Hats</a></li>
+                                                    <li><a href="#">Hair Accessories</a></li>
+                                                    <li><a href="#">Jewellery</a></li>
+                                                    <li><a href="#">Travel Accessories</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-2 py-3">
+                                                <div class="mb-3 fw-bold">Collections</div>
+                                                <ul class="list-unstyled fs-lg">
+                                                    <li><a href="#">All Collections</a></li>
+                                                    <li><a href="#">Occasionwear</a></li>
+                                                    <li><a href="#">Going Out</a></li>
+                                                    <li><a href="#">Workwear</a></li>
+                                                    <li><a href="#">Holiday Shop</a></li>
+                                                    <li><a href="#">Jean Fit Guide</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-4 card card-img-overlay align-items-center justify-content-center" id="op" onmouseover="addside()" onmouseout="lessside()" style="position: relative; background-size: cover; background-image: url('./public/images/product-110.jpg');">
+                                                <div class="card" style="position: absolute;"><button class="btn btn-light btn-lg"  type="button">Shop Sweaters <span id="ra" class="bi bi-arrow-right-short"></span></button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a class="nav-link"><h6>shop</h6></a></li>
+                    <li class="nav-item" onmouseover="displaydropdown(3)" onmouseout="displaynonedown(3)"><a class="nav-link"><h6>Pages</h6></a>
+                        <ul class="dropdown-menu card card-body" id="pages">
+                            <li class="dropdown-item-text"><a>About</a></li>
+                            <li class="dropdown-item-text"><a>Contact Us</a></li>
+                            <li class="dropdown-item-text"><a>Store Locator</a></li>
+                            <li class="dropdown-item-text"><a>FAQ</a></li>
+                            <li class="dropdown-item-text"><a>Coming Soon</a></li>
+                         </ul>
+                    </li>
+                    <li class="nav-item" onmouseover="displaydropdown(4)" onmouseout="displaynonedown(4)"><a class="nav-link"><h6>Blog</h6></a>
+                        <div class="dropdown-menu card-body" id="blog">
+                            <ul class="list-unstyled dropdown-item">
+                                <li class="dropdown-item-text"><a>Blog</a></li>
+                                <li class="dropdown-item-text"><a>Blog Post</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="text-dark" id="quicklinks">
+                <span class="bi bi-search"></span>
+                <span class="bi bi-heart"></span>
+                <a href="#cart" onclick="cartclick()" data-bs-toggle="modal"><span class="bi bi-cart position-relative"><span class="badge rounded rounded-circle bg-danger" style="position: absolute; top: -10px; left: -9px;" id="cartCount"></span></span></a>
+                <a data-bs-target="#login" data-bs-toggle="modal"><span class="border rounded-2 border-1 bg-warning p-2" id="lgsg">login/signin</span></a><!--this is inter document link where it actually goes to another page from this page to login page-->
+            </div>
+            <button class="navbar-toggler" data-bs-target="#home" data-bs-toggle="collapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div> 
+    </div>
+    <div class="d-flex justify-content-center bg-black p-1" id="ligh">
+        <span class="bi bi-lightning-fill mt-3"></span>
+        <span class="mt-3"><b><p>HAPPY HOLIDAY DEALS ON EVERYTHING</p></b></span>
+        <span class="bi bi-lightning-fill mt-3"></span>
+    </div>
+    <section class="mt-3 row">
+        <nav class="col-2">
+            <label class="form-label fw-bold">Select categories</label>
+            <div>
+                <select onchange="Categorychanged()" id="1stcategory" class="form-select">
+                    
+                </select>
+            </div>
+        </nav>
+        <main class="col-1 d-flex flex-wrap overflow-auto" style="width: 1200px;" >
+
+        </main>
+    </section>
+    <div class="modal fade" id="cart">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-primary">Your cart items<span class="bi bi-cart-check-fill"></span></h2>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Head</th>
+                                <th>Preview</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="login">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="bi bi-person"></span>User Login</h2>
+                    <button data-bs-dismiss="modal" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        <dt>User Name</dt>
+                        <dd><input type="text" class="form-control"></dd>
+                        <dt>Password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dd style="text-align: center;"><a class="link-dark" href="#signin" data-bs-toggle="modal">
+                            New to Buy it ? Register here
+                        </a></dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" >Login</button>
+                    <button data-bs-dismiss="modal" class="btn btn-danger">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="signin">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="bi bi-person"></span>User Register</h2>
+                    <button data-bs-dismiss="modal" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        <dt class="form-text">Email Id</dt>
+                        <dd><input type="email" class="form-control"></dd>
+                        <dt class="form-text">Password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dt class="form-text">Confirm password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dt class="form-text">Phone Number</dt>
+                        <dd><input type="text" class="form-control"></dd>
+                        <dt class="form-text">Gender</dt>
+                        <dd>
+                            <input type="radio" class="form-check-input" id="male" name="gender">
+                            <label for="male" class="form-check-label">Male</label>
+                            <input type="radio" class="form-check-input" id="female" name="gender">
+                            <label for="female" class="form-check-label">Female</label>
+                            <input type="radio" class="form-check-input" id="others" name="gender">
+                            <label for="others" class="form-check-label">Others</label>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Register</button>
+                    <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+</html>
