@@ -3,9 +3,1409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>shopper.</title>
+    <link rel="icon" href="./public/images.gif">
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        #pagenation a{
+            padding: 10px;
+        }
+        #pagenation a:hover{
+            color: red;
+            text-decoration: underline;
+        }
+        div[name="r1"]{
+            display: none;
+        }
+        div[name="r2"]:hover div{
+            display: block;
+        }
+        div[name="r3"]{
+            background-color: white;
+            font-size: large;
+            display: none;
+        }
+        div[name="r3"]:hover{
+            background-color: tomato;
+        }
+        a[name="link1"]:hover{
+            text-decoration: underline;
+            color: black;
+        }
+        #link2:hover{
+            text-decoration: underline;
+        }
+        li{
+            padding: 5px;
+        }
+        a{
+            text-decoration: none;
+            color: black;
+            cursor: pointer;
+        }
+        #home a{
+            color: black;
+        }
+        #home a:hover{
+            color: red;
+        }
+        #homesec a:hover{
+            color: red;
+            text-decoration-line: underline;
+        }
+    </style>
+    <script>
+         var list1=[
+            {"image":"../public/images/Leather%20mid-heel%20Sandals.jpg","color":"Brown","image2":"./public/images/Leather mid-heel Sandals1.jpg","desc":"Shoes","title":"Leather mid-heel Sandals","price":"$129.00","stars":4},
+            {"desc":"Dresses","title":"Cotton floral print Dress","color":"Pink","image2":"./public/images/product-6.jpg","price":"$40.00","image":"./public/images/dress.jpg","stars":5},
+            {"desc":"Shoes","image":"./public/images/shoes.jpg","color":"Blue","image2":"./public/images/product-122.jpg","title":"Leather Sneakers","price":"$85.00","stars":3},
+            {"desc":"Tops","image":"../public/images/tops.jpg","color":"White","image2":"./public/images/tops2.jpg","title":"Cropped cotton Top","price":"$29.00","stars":4},
+            {"image":"../public/images/dresses.jpg","color":"Yellow","image2":"./public/images/dresses2.jpg","desc":"Dresses","title":"Floral print midi Dress","price":"$50.00","stars":3},
+            {"image":"../public/images/bags.jpg","color":"Brown","image2":"./public/images/product-123.jpg","desc":"Bags","title":"Suede cross body Bag","price":"$49.00","stars":5},
+            {"image":"../public/images/skirts.jpg","color":"White-Black","image2":"./public/images/product-124.jpg","desc":"Skirts","title":"Printed A-line Skirt","price":"$79.00","stars":4},
+            {"image":"../public/images/shoes2.jpg","color":"Brown","image2":"./public/images/shoes2-1.jpg","desc":"Shoes","title":"Heel strappy Sandals","price":"$90.00","stars":2}
+        ];
+        function bodyload(){
+            displaynonedown(0);
+            getcartcount(0);
+            let x=localStorage.getItem("item");
+            disthismain(x);
+            starsmade(list1[x].stars);
+            let s=x;
+            reamaningcards(s);
+            ratingstarscomm(list1[s].stars);
+        }
+        function ratingstarscomm(l){
+            for(let i=0;i<l;i++){
+                let span=document.createElement("span");
+                span.innerHTML=`
+                    <span class="bi bi-star-fill"><span>
+                `;
+                document.getElementById("rating").appendChild(span);
+            } 
+            for(let i=l;i<5;i++){
+                let span=document.createElement("span");
+                span.innerHTML=`
+                    <span class="bi bi-star"><span>
+                `;
+                document.getElementById("rating").appendChild(span);
+            }
+            let span=document.createElement("span");
+            span.className="m-1"
+            span.innerHTML=`
+                <span><h6>Reviews(6)</h6><span>
+            `;
+            document.getElementById("rating").appendChild(span); 
+        }
+        function sdc(s){
+            localStorage.setItem("item",s);
+            window.location.href='./cartpage.html';
+            // document.getElementById(a.id).addEventListener("click",function(event){ 
+            //     window.location.href="./cartpage.html";
+            // })
+           
+        }
+        function fastsize1(value){
+            document.getElementById("size44").innerHTML=value;
+        }
+        function Preview(v){
+            document.getElementById('Previewitems').innerHTML="";
+            let div=document.createElement('div');
+            div.className="container-fluid d-flex";
+            for(var i=0;i<list1.length;i++){
+                if(v===i){
+                    div.innerHTML=`
+                        <div>
+                            <iframe scrolling="no" name="flamebody" src="${list1[i].image}"  height="550px" width="600px"></iframe>
+                            <button style="margin-top:-10px;  border: none; padding:15px; background-color:tomato; width:540px; color:white;" onclick="sdc(${i})">More Product Info <span class="bi bi-info-circle"></span></button>
+                        </div>
+                        <div style="margin:40px 5px 20px 5px">
+                            <div>
+                                <div>
+                                    <h3>${list1[i].title}</h3>
+                                </div>
+                                <div class="d-flex">
+                                    <span><h4>${list1[i].price}</h4></span>
+                                    <span class="m-1">&#40;In Stock&#41;</span>
+                                </div>
+                                <div style="margin-top: 20px;">
+                                    <p>Color:<strong>${list1[i].color}</strong></p>
+                                </div>
+                                <div class="my-3">
+                                    <span>
+                                        <a href="${list1[i].image}" target="flamebody">
+                                            <img src="${list1[i].image}" height="100px" width="100px">    
+                                        </a> 
+                                    </span>
+                                    <span>
+                                        <a href="${list1[i].image2}" target="flamebody">
+                                            <img src="${list1[i].image2}" height="100px" width="100px">    
+                                        </a> 
+                                    </span>
+                                </div>
+                                <p class="mt-2">Size: <span id="size44"></span> <strong>US</strong></p>
+                            </div>
+                            <div class="d-flex flex-wrap" style="margin-left:-22px; margin-top:20px;">
+                                <div class="form-check ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizeone1" value="6" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizeone1">6</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizetwo1" value="6" disabled>
+                                    <label class="btn btn-outline-dark" for="modalproductsizetwo1">6.5</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizethree1" value="7" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizethree1">7</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizefour1" value="7.5" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizefour1">7.5</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizefive1" value="8" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizefive1">8</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizesix1" value="8.5" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizesix1">8.5</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizeseven1" value="9" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizeseven1">9</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizeeight1" value="9.5" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizeeight1">9.5</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizenine1" value="10" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizenine1">10</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizeten1" value="10.5" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizeten1">10.5</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizeellven1" value="11" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizeellven1">11</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsizetwelve1" value="11.5" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsizetwelve1">11.5</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsize131" value="12" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsize131">12</label>
+                                </div>
+                                <div class="form-check  ">
+                                    <input type="radio" class="btn-check" name="modalproductsize1" id="modalproductsize141" value="13" onclick="fastsize1(this.value)">
+                                    <label class="btn btn-outline-dark" for="modalproductsize141">13</label>
+                                </div>
+                            </div>
+                            <div class="mt-3 d-flex" style="margin-left:-3px;">
+                                <div class="m-2">
+                                    <select class="dropdown" style="font-size: 20px; padding: 10px;">
+                                        <optgroup class="dropdown-item">
+                                            <option value="1" class="dropdown-item-text">1</option>
+                                            <option value="1" class="dropdown-item-text">2</option>
+                                            <option value="1" class="dropdown-item-text">3</option>
+                                            <option value="1" class="dropdown-item-text">4</option>
+                                            <option value="1" class="dropdown-item-text">5</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="m-2">
+                                    <button class="btn bg-dark text-white" onclick="addtoclick(${i})" style="font-size: large; padding: 10px; width: 200px;"> Add to Cart <span class="bi bi-cart"></span></button>
+                                </div>
+                                <div class="m-2">
+                                    <button class="btn btn-outline-dark " onclick="clicktowish(${i})" style="font-size: large; padding: 10px; width: 150px;">Wishlist <span class="bi bi-heart"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-2">
+                            <span class="btn btn-close" data-bs-dismiss="modal"></span>
+                        </div>
+                    `;
+                }
+                else{
+                    continue;
+                }
+                document.getElementById('Previewitems').appendChild(div);
+            }
+        }
+        function reamaningcards(i){
+            document.getElementById("main4").innerHTML="";
+            if(i<=4){
+                for(let j=0;j<=4;j++){
+                    if(i==j){
+                        console.log("here");
+                    }
+                    else{
+                        let div=document.createElement("div");
+                        div.innerHTML=`
+                            <div class="me-5 ms-2 mb-3">
+                                <div style="position: relative; background-image: url(${list1[j].image}); background-size: cover; height: 270px; width: 240px;" name="r2">
+                                    <div style="cursor: pointer; position: relative; background-image: url(${list1[j].image2}); background-size: cover; height: 270px; width: 240px;" name="r1"  onclick="sdc(${j})"></div>
+                                    <div>       
+                                        <a href="#dials" onclick="Preview(${j})" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                        <a onclick="addtoclick(${j})"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                        <a onclick="clicktowish(${j})"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                                    </div>   
+                                </div>
+                                <div>${list1[j].desc}</div>
+                                <div style="color:black"><b>${list1[j].title}</b></div>
+                                <div><b>${list1[j].price}</b></div>
+                            </div>
+                        `;
+                        document.getElementById("main4").appendChild(div);
+                    }
+                }
+            }
+            else{
+                for(let k=3;k<list1.length;k++){
+                    if(i==k){
+                        console.log("here");
+                    }
+                    else{
+                        let div=document.createElement("div");
+                        div.innerHTML=`
+                            <div class="me-4 ms-2 mb-3">
+                                <div style="position: relative; background-image: url(${list1[k].image}); background-size: cover; height: 270px; width: 240px;" name="r2">
+                                    <div style="cursor: pointer; position: relative; background-image: url(${list1[k].image2}); background-size: cover; height: 270px; width: 240px;" name="r1"  onclick="sdc(${k})"></div>
+                                    <div>       
+                                        <a href="#dials" onclick="Preview(${k})" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                        <a onclick="addtoclick(${k})"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                        <a onclick="clicktowish(${k})"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                                    </div>   
+                                </div>
+                                <div>${list1[k].desc}</div>
+                                <div style="color:black"><b>${list1[k].title}</b></div>
+                                <div><b>${list1[k].price}</b></div>
+                            </div>
+                        `;
+                        document.getElementById("main4").appendChild(div);
+                    }
+                }
+            }
+        }
+        function starsmade(y){
+            console.log(y);
+            for(let i=0;i<y;i++){
+                let span=document.createElement("span");
+                span.innerHTML=`
+                    <span class="bi bi-star-fill"><span>
+                `;
+                document.getElementById("stars").appendChild(span);
+            } 
+            for(let i=y;i<5;i++){
+                let span=document.createElement("span");
+                span.innerHTML=`
+                    <span class="bi bi-star"><span>
+                `;
+                document.getElementById("stars").appendChild(span);
+            }
+            let span=document.createElement("span");
+            span.innerHTML=`
+                <span><h6>Reviews(6)</h6><span>
+            `;
+            document.getElementById("stars").appendChild(span);
+        }
+        function displaynonedown(x){
+            switch(x){
+                case 1:
+                    document.getElementById('ds').style='display:none;';
+                    break;
+                case 2:
+                     document.getElementById('catlog').style='display:none';
+                     break;
+                case 3:
+                    document.getElementById('pages').style='display:none';
+                    break;
+                case 4:
+                    document.getElementById('blog').style='display:none';
+                    break;
+                default:
+                    document.getElementById('ds').style='display:none;';
+                    document.getElementById('catlog').style='display:none';
+                    document.getElementById('pages').style='display:none';
+                    document.getElementById('blog').style='display:none';
+            }
+        }
+        function displaydropdown(y){
+            switch(y){
+                case 1:
+                     document.getElementById('ds').style='display:block; position:absolute; top:60px;';
+                     break;
+                case 2:
+                    document.getElementById('catlog').style='position:absolute; top:60px; left:0px; display:block;'; 
+                    break;
+                case 3:
+                    document.getElementById('pages').style='display:block; position:absolute; top:60px;'; 
+                    break;
+                case 4:
+                    document.getElementById('blog').style='display:block; position:absolute; top:60px;';
+                    break;
+            }
+        }
+        function fastsize(value){
+            document.getElementById("size").innerHTML=value;
+        }
+        function disthismain(s){
+            let div = document.createElement("div");
+            div.className="d-flex"
+            div.innerHTML=`
+                <div class="pe-5 mt-3">
+                    <iframe scrolling="no" name="flamebody1" src="${list1[s].image}" height="600px" width="500px"></iframe>
+                </div>
+                <div class="m-3">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="text-muted">${list1[s].desc}</h6>
+                        <span id="stars"><span>
+                    </div>
+                    <h1 style="margin-top:-25px;">${list1[s].title}</h1>
+                    <h5 class="text-muted">${list1[s].price}</h5>
+                    <h5>Color: ${list1[s].color}</h5>
+                    <div class="my-3">
+                        <span>
+                            <a href="${list1[s].image}" target="flamebody1">
+                                <img src="${list1[s].image}" alt="refersh agaian" width="100px" height="100px">
+                            </a>
+                        </span>
+                        <span>
+                            <a href="${list1[s].image2}" target="flamebody1">
+                                <img src="${list1[s].image2}" width="100px" height="100px">
+                            </a>
+                        </span>
+                    </div>
+                    <p>Size: <span id="size"></span> <strong>US</strong></p>
+                    <div class="d-flex flex-wrap" style="margin-left:-22px">
+                        <div class="form-check">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeone" value="6" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizeone">6</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizetwo" value="6" disabled>
+                            <label class="btn btn-outline-dark" for="modalproductsizetwo">6.5</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizethree" value="7" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizethree">7</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizefour" value="7.5" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizefour">7.5</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizefive" value="8" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizefive">8</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizesix" value="8.5" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizesix">8.5</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeseven" value="9" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizeseven">9</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeeight" value="9.5" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizeeight">9.5</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizenine" value="10" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizenine">10</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeten" value="10.5" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizeten">10.5</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizeellven" value="11" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizeellven">11</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsizetwelve" value="11.5" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsizetwelve">11.5</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsize13" value="12" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsize13">12</label>
+                        </div>
+                        <div class="form-check  ">
+                            <input type="radio" class="btn-check" name="modalproductsize" id="modalproductsize14" value="13" onclick="fastsize(this.value)">
+                            <label class="btn btn-outline-dark" for="modalproductsize14">13</label>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <span><img src="./public/icon-ruler.svg"> <a href="#sizechart" onclick="sizeschart()" data-bs-toggle="modal" class="ms-2" name="link1">Size chart</a></span>    
+                    </div>
+                    <div class="mt-4 d-flex" style="margin-left:-3px;">
+                        <div class="m-2">
+                            <select class="dropdown" style="font-size: 20px; padding: 10px;">
+                                <optgroup class="dropdown-item">
+                                    <option value="1" class="dropdown-item-text">1</option>
+                                    <option value="1" class="dropdown-item-text">2</option>
+                                    <option value="1" class="dropdown-item-text">3</option>
+                                    <option value="1" class="dropdown-item-text">4</option>
+                                    <option value="1" class="dropdown-item-text">5</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="m-2">
+                            <button class="btn bg-dark text-white" onclick="addtoclick(${s})" style="font-size: large; padding: 10px; width: 200px;"> Add to Cart <span class="bi bi-cart"></span></button>
+                        </div>
+                        <div class="m-2">
+                            <button class="btn btn-outline-dark " onclick="clicktowish(${s})" style="font-size: large; padding: 10px; width: 150px;">Wishlist <span class="bi bi-heart"></span></button>
+                        </div>
+                    </div>
+                    <div class="my-4">
+                        <h6 class="text-black">Is your size/color sold out?<a href="#removedsize" onclick="sfc(${s})" data-bs-toggle="modal" id="link2">Join the Wait List!</a></h6>
+                    </div>
+                    <div class="d-flex">
+                        <span><h6>Share:</h6></span>
+                        <span style="margin-top: -5px; margin-left:20px"><button class="btn btn-outline-dark rounded rounded-circle"><i class="bi bi-twitter"></i></button><span>
+                        <span style="margin-top: -5px;"><button class="btn btn-outline-dark rounded rounded-circle"><i class="bi bi-facebook"></i></button><span>
+                        <span style="margin-top: -5px;"><button class="btn btn-outline-dark rounded rounded-circle"><i class="bi bi-pinterest"></i></button><span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('main3').appendChild(div);
+        }
+        function sfc(z){
+            document.getElementById("rembrow").innerHTML="";
+            let div=document.createElement("div");
+            div.className="d-flex";
+            div.innerHTML=`
+                <img src="${list1[z].image}" width="150px" height="150px" class="m-2">
+                <div>
+                    <h4 class="m-2">${list1[z].title}</h4>
+                    <div class="d-flex flex-wrap" style="margin-left:-12px; margin-top:20px;">
+                        <div class="form-check mb-2">
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitListSize2One" value="6" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                            <label class="btn btn-outline-dark" for="modalWaitListSize2One">3XS</label>
+                        </div>
+                        <div class="form-check  mb-2" style="margin-left:-12px;">
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitListSize2Two" value="6.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                            <label class="btn btn-outline-dark" for="modalWaitListSize2Two">2XS</label>
+                        </div>
+                        <div class="form-check  mb-2" style="margin-left:-12px;">
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitListSize2Three" value="7" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                            <label class="btn btn-outline-dark" for="modalWaitListSize2Three">XS</label>
+                        </div>
+                        <div class="form-check  mb-2" style="margin-left:-12px;">
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitListSize2Four" value="7.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption" checked>
+                            <label class="btn btn-outline-dark" for="modalWaitListSize2Four">S</label>
+                        </div>
+                        <div class="form-check  mb-2" style="margin-left:-12px;">
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitListSize2Five" value="8" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                            <label class="btn btn-outline-dark" for="modalWaitListSize2Five">M</label>
+                        </div>
+                        <div class="form-check  mb-2" >
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitListSize2Six" value="8.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                            <label class="btn btn-outline-dark" for="modalWaitListSize2Six">LG</label>
+                        </div>
+                        <div class="form-check  mb-2" style="margin-left:-12px;">
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitListSize2Seven" value="9" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                            <label class="btn btn-outline-dark" for="modalWaitListSize2Seven">XL</label>
+                        </div>
+                        <div class="form-check  mb-2" style="margin-left:-12px;">
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitListSize2Eight" value="9.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                            <label class="btn btn-outline-dark" for="modalWaitListSize2Eight">2XL</label>
+                        </div>
+                        <div class="form-check  mb-2" style="margin-left:-12px;">
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitListSize2Nine" value="10" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                            <label class="btn btn-outline-dark" for="modalWaitListSize2Nine">3XL</label>
+                        </div>
+                        <div class="form-check  mb-2" style="margin-left:-12px;">
+                            <input type="radio" class="btn-check" name="modalWaitListSize" id="modalWaitList2SizeTen" value="10.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                            <label class="btn btn-outline-dark" for="modalWaitList2SizeTen">4XL</label>
+                        </div>
+                    </div>
+                    <div style="margin:30px 0px 10px -130px;">
+                        <p>
+                            Justo ut diam erat hendrerit morbi porttitor, per eu curabitur diam sociis.
+                        </p>
+                    </div>
+                    <div style="margin:20px 0px 10px -130px;">
+                        <input type="text"  placeholder="Your Name*" class="p-2">
+                        <input type="text"  placeholder="Your Email*" class="p-2 ms-4">
+                    </div>
+                    <div style="margin:20px 0px 10px 30px;">
+                        <button class="btn btn-dark">Subscribe</button>
+                    </div>
+                </div>   
+            `;
+            document.getElementById("rembrow").appendChild(div);
+        }
+        function addtoclick(index){
+            for(let i=0;i<list1.length;i++){
+                if(index===i){
+                    cartitems.push(list1[i]);
+                    cartclick();
+                    getcartcount(1);
+                }
+                else{
+                    continue;
+                }
+            }
+        }
+        function addside(){
+            document.getElementById('ra').style="margin-left:4px;";
+        }
+        function lessside(){
+            document.getElementById('ra').style='margin-left:-4px;';
+        }
+        var cartitems=[];
+        function getcartcount(i){
+            if(i===0){
+                var cartlen=localStorage.getItem('cardnumber');
+                document.getElementById('cartid').innerText=cartlen;
+                if(cartlen===0){
+                    cartclick();
+                }
+                else{
+                    AddClick();
+                }
+            }
+            else{
+                document.getElementById('cartid').innerText=cartitems.length;
+            }
+        }
+        const wishlist=new Set();
+        function clicktowish(index){
+            for(let i=0;i<list1.length;i++){
+                if(index===i){
+                    wishlist.add(list1[i]);
+                    console.log(wishlist);
+                }
+                else{
+                    continue;
+                }
+            }
+        }
+        function popwishlist(index){
+            wishlist.forEach((point)=>{
+                if(point.title===index){
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function movetocart(indes){
+            wishlist.forEach((point)=>{
+                if(point.title===indes){
+                    cartitems.push(point);
+                    getcartcount(1);
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function clicktowishing(){
+            document.getElementById('wishinglistoffcanves').innerHTML="";
+            const iterator=wishlist.values();
+            wishlist.forEach(function(product){
+                let div=document.createElement('div');
+                div.className="container-fluid d-flex m-2";
+                div.innerHTML=`
+                    <div><img src="${product.image}" width="150px" height="200px"></div>
+                    <div class="m-2"> 
+                        <h5>${product.title}</h5>
+                        <h4>${product.desc}</h4>
+                        <h6 class="text-muted">${product.price}</h6>
+                        <span class="btn btn-outline-dark bi bi-trash mt-1" onclick="popwishlist('${product.title}')"></span>
+                        <button class="btn btn-outline-dark" onclick="movetocart('${product.title}')">Move To Cart</button>
+                    </div>
+                `;
+                document.getElementById('wishinglistoffcanves').appendChild(div);
+
+            })
+        }
+        let list4=[
+            {"size":"XS","US":2,"Bust":32,"Waist":"24 - 25","Hips":"33 - 34"},
+            {"size":"S","US":4,"Bust":"34-35","Waist":"26 - 27","Hips":"35 - 36"},
+            {"size":"M","US":6,"Bust":"36-37","Waist":"28 - 29","Hips":"38 - 40"},
+            {"size":"L","US":8,"Bust":"38-39","Waist":"30 - 31","Hips":"42 - 44"},
+            {"size":"XL","US":10,"Bust":"40-41","Waist":"32 - 33","Hips":"45 - 47"},
+            {"size":"XXL","US":12,"Bust":"42-43","Waist":"34 - 35","Hips":"48 - 50"}
+        ]
+        let list5=[
+            {"size":36,"US":5,"Bust":22.8},
+            {"size":36.5,"US":5.5,"Bust":23.1},
+            {"size":37,"US":6,"Bust":23.5},
+            {"size":37.5,"US":6.5,"Bust":23.5},
+            {"size":38,"US":7,"Bust":24.1},
+            {"size":38.5,"US":7.5,"Bust":24.5},
+        ]
+        let list6=[
+            {"size":39,"US":8,"Bust":22.8},
+            {"size":39.5,"US":8.5,"Bust":23.1},
+            {"size":40,"US":9,"Bust":23.5},
+            {"size":40.5,"US":9.5,"Bust":23.5},
+            {"size":41,"US":10,"Bust":24.1},
+            {"size":41.5,"US":10.5,"Bust":24.5}
+        ]
+        function sizes3chart(){
+            document.getElementById('e5').innerHTML="";
+            list6.map(function(product){
+                var tr=document.createElement('tr');
+                var tdsize=document.createElement('td');
+                var tdUS=document.createElement('td');
+                var tdbust=document.createElement('td');
+                tdsize.innerHTML=product.size;
+                tdUS.innerHTML=product.US;
+                tdbust.innerHTML=product.Bust;
+                tr.appendChild(tdsize);
+                tr.appendChild(tdUS);
+                tr.appendChild(tdbust);
+                document.getElementById("e5").appendChild(tr);
+            })
+        }
+        function sizes2chart(){
+            document.getElementById('e4').innerHTML="";
+            list5.map(function(product){
+                var tr=document.createElement('tr');
+                var tdsize=document.createElement('td');
+                var tdUS=document.createElement('td');
+                var tdbust=document.createElement('td');
+                tdsize.innerHTML=product.size;
+                tdUS.innerHTML=product.US;
+                tdbust.innerHTML=product.Bust;
+                tr.appendChild(tdsize);
+                tr.appendChild(tdUS);
+                tr.appendChild(tdbust);
+                document.getElementById("e4").appendChild(tr);
+            })
+            sizes3chart();
+        }
+        function sizeschart(){
+            document.getElementById('e3').innerHTML="";
+            list4.map(function(product){
+                var tr=document.createElement('tr');
+                var tdsize=document.createElement('td');
+                var tdUS=document.createElement('td');
+                var tdbust=document.createElement('td');
+                var tdwaist=document.createElement('td');
+                var tdhips=document.createElement('td');
+                tdsize.innerHTML=product.size;
+                tdUS.innerHTML=product.US;
+                tdbust.innerHTML=product.Bust;
+                tdwaist.innerHTML=product.Waist;
+                tdhips.innerHTML=product.Hips;
+                tr.appendChild(tdsize);
+                tr.appendChild(tdUS);
+                tr.appendChild(tdbust);
+                tr.appendChild(tdwaist);
+                tr.appendChild(tdhips);
+                document.getElementById("e3").appendChild(tr);
+            })
+            sizes2chart();
+        }
+        function AddClick(){
+            var id=[];
+            id.push(localStorage.getItem('cartpr'));
+            var res=id[0].split(',');
+            for(var i=0;i<res.length;i++){
+                fetch(`http://fakestoreapi.com/products/${res[i]}`)
+                .then(function(res){
+                    return res.json();
+                })
+                .then(function(product){
+                    cartitems.push(product);
+                })
+            }
+        }
+        function cartclick(){
+            if(cartitems.length!==0){
+                document.querySelector('tbody').innerHTML="";
+                cartitems.map(function(product){
+                    var tr=document.createElement('tr');
+                    var tdTitle=document.createElement('td');
+                    var tdpreview=document.createElement('td');
+                    var tdprice=document.createElement('td');
+                    var tdcross=document.createElement('td');
+                    tdTitle.innerHTML=product.title;
+                    tdpreview.innerHTML=`<img src=${product.image} width="50px" height="50px">`;
+                    tdprice.innerHTML=product.price;
+                    tdcross.innerHTML=`<button class="btn-close" onclick="popclick(${cartitems.indexOf(product)})"></button>`;
+                    tr.appendChild(tdTitle);
+                    tr.appendChild(tdpreview);
+                    tr.appendChild(tdprice);
+                    tr.appendChild(tdcross);
+                    document.querySelector('tbody').appendChild(tr);
+                })
+            }
+            else{
+                document.querySelector("tbody").innerHTML=`<tr>
+                        <td>nothing added to cart</td>
+                    </tr>`;
+            }
+        }
+        function popclick(js){
+            cartitems.splice(js,1);
+            cartclick();
+            getcartcount(1);
+        }
+    </script>
 </head>
-<body>
-    
+<body onload="bodyload()" class="container-fluid">
+    <header class="border-bottom">
+        <div class="navbar navbar-expand-lg text-dark bg-white">
+            <div class="container-fluid">
+                <div class="navbar-brand"><a href="./index.html"><h2>Shopper.</h2></a></div>
+                <div class="naba">
+                    <ul class="navbar-nav navbar-collapse collapse" id="home">
+                        <li class="nav-item" onmouseover="displaydropdown(1)" onmouseout="displaynonedown(1)"><a class="nav-link"><h6>New & featuring</h6></a>
+                            <ul class="dropdown-menu card card-body" id="ds">
+                                <li class="dropdown-item-text"><a href="./searchpage.html">New Arrival</a></li>
+                                <li class="dropdown-item-text"><a>Best Seller</a></li>
+                                <li class="dropdown-item-text"><a>Latest Clothing</a></li>
+                                <li class="dropdown-item-text"><a>Latest Shoes</a></li>
+                                <li class="dropdown-item-text"><a>Exclusive</a></li>
+                                <li class="dropdown-item-text"><a>Customise</a></li>
+                            </ul>   
+                        </li>
+                        <li class="nav-item" onmouseover="displaydropdown(2)" onmouseout="displaynonedown(2)"><a class="nav-link"><h6>Catlog</h6></a>
+                            <div class="dropdown-menu card card-body w-100" id="catlog">
+                                <div class="border-top border-bottom mb-2">
+                                    <div class="container mt-2 mb-2">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <nav class="nav nav-tabs">
+                                                    <a class="nav-link text-uppercase active" data-bs-toggle="tab" href="#navtap">
+                                                        Women
+                                                    </a>
+                                                    <a class="nav-link text-uppercase" data-bs-toggle="tab" href="#navtap">
+                                                        Men
+                                                    </a>
+                                                    <a class="nav-link text-uppercase" data-bs-toggle="tab" href="#navtap">
+                                                        Kids
+                                                    </a>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="navtap">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-2 py-3">
+                                                    <!-- Heading -->
+                                                    <div class="mb-3 fw-bold">Clothing</div>
+                                                    <!-- Links -->
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Clothing</a></li>
+                                                        <li><a href="./searchpage.html">Blouses & Shirts</a></li>
+                                                        <li><a  href="./searchpage.html">Coats & Jackets</a></li>
+                                                        <li><a  href="./searchpage.html">Dresses</a></li>
+                                                        <li><a  href="./searchpage.html">Hoodies & Sweats</a></li>
+                                                        <li><a  href="./searchpage.html">Denim</a></li>
+                                                        <li><a  href="./searchpage.html">Jeans</a></li>
+                                                        <li><a  href="./searchpage.html">Jumpers & Cardigans</a></li>
+                                                        <li><a  href="./searchpage.html">Leggings</a></li>
+                                                    </ul>
+                                                </div>        
+                                                <div class="col-2 py-3">
+                                                    <div class="mb-3 fw-bold">Shoes & Boots</div>
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Shoes & Boots</a></li>
+                                                        <li><a href="./searchpage.html">Branded Shoes</a></li>
+                                                        <li><a href="./searchpage.html">Boots</a></li>
+                                                        <li><a href="./searchpage.html">Heels</a></li>
+                                                        <li><a href="./searchpage.html">Trainers</a></li>
+                                                        <li><a href="./searchpage.html">Sandals</a></li>
+                                                        <li><a href="./searchpage.html">Shoes</a></li>
+                                                        <li><a href="./searchpage.html">Wide Fit Shoes</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-2 py-3">
+                                                    <div class="mb-3 fw-bold">Bags & Accessories</div>
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Bags & Accessories</a></li>
+                                                        <li><a href="./searchpage.html">Accessories</a></li>
+                                                        <li><a href="./searchpage.html">Bags & Purses</a></li>
+                                                        <li><a href="./searchpage.html">Luggage</a></li>
+                                                        <li><a href="./searchpage.html">Belts</a></li>
+                                                        <li><a href="./searchpage.html">Hats</a></li>
+                                                        <li><a href="./searchpage.html">Hair Accessories</a></li>
+                                                        <li><a href="./searchpage.html">Jewellery</a></li>
+                                                        <li><a href="./searchpage.html">Travel Accessories</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-2 py-3">
+                                                    <div class="mb-3 fw-bold">Collections</div>
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Collections</a></li>
+                                                        <li><a href="./searchpage.html">Occasionwear</a></li>
+                                                        <li><a href="./searchpage.html">Going Out</a></li>
+                                                        <li><a href="./searchpage.html">Workwear</a></li>
+                                                        <li><a href="./searchpage.html">Holiday Shop</a></li>
+                                                        <li><a href="./searchpage.html">Jean Fit Guide</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-4 card align-items-center justify-content-center" id="op" onmouseover="addside(4)" onmouseout="lessside(4)" style="position: relative; background-size: cover; background-image: url('./public/images/product-110.jpg');">
+                                                    <div class="card-body" style="position: absolute;"><button class="btn btn-light btn-lg" type="button">Shop Sweaters <span id="ra" class="bi bi-arrow-right-short"></span></button></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item"><a class="nav-link"><h6>shop</h6></a></li>
+                        <li class="nav-item" onmouseover="displaydropdown(3)" onmouseout="displaynonedown(3)"><a class="nav-link"><h6>Pages</h6></a>
+                            <ul class="dropdown-menu card card-body" id="pages">
+                                <li class="dropdown-item-text"><a>About</a></li>
+                                <li class="dropdown-item-text"><a>Contact Us</a></li>
+                                <li class="dropdown-item-text"><a>Store Locator</a></li>
+                                <li class="dropdown-item-text"><a>FAQ</a></li>
+                                <li class="dropdown-item-text"><a>Coming Soon</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item" onmouseover="displaydropdown(4)" onmouseout="displaynonedown(4)"><a class="nav-link"><h6>Blog</h6></a>
+                            <div class="dropdown-menu card-body" id="blog">
+                                <ul class="list-unstyled dropdown-item">
+                                    <li class="dropdown-item-text"><a>Blog</a></li>
+                                    <li class="dropdown-item-text"><a>Blog Post</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="navbar-nav navbar-collapse collapse mb-2" id="home">
+                        <span class="bi bi-search me-3"></span>
+                        <a href="#wishlist" data-bs-toggle="offcanvas" onclick="clicktowishing()"><span class="bi bi-heart me-3"></span></a>
+                        <a href="#cart" onclick="cartclick()" data-bs-toggle="modal"><span class="bi bi-cart position-relative me-3"><span class="badge rounded rounded-circle bg-danger" style="position: absolute; top: -10px; left: 5px;" id="cartid"></span></span></a>
+                        <a data-bs-target="#login" style="cursor: pointer;" data-bs-toggle="modal"><span class=" border rounded-2 border-1 bg-warning p-2 me-3" id="lgsg">login/signin</span></a><!--this is inter document link where it actually goes to another page from this page to login page-->
+                    </div>
+                </div>
+            </div>
+            <button class="navbar-toggler" data-bs-target="#home" data-bs-toggle="collapse">
+                <span class="navbar-toggler-icon"></span>
+            </button> 
+        </div>
+    </header>
+    <div class="modal fade" id="cart">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-primary">Your cart items<span class="bi bi-cart-check-fill"></span></h2>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Head</th>
+                                <th>Preview</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="removedsize">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-dark">Wait List</h2>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="rembrow">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="sizechart">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Size Chart</h2>
+                    <button data-bs-dismiss="modal" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between m-3">
+                        <h3>Clothing</h3>
+                        <div>
+                            <span>
+                                <input type="radio" class="btn-check" name="s" id="inch" autocomplete="off" checked>
+                                <label class="btn btn-outline-dark" for="inch">in</label>
+                                <input type="radio" class="btn-check" name="s" id="cm" autocomplete="off">
+                                <label class="btn btn-outline-dark" for="cm">cm</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="border-bottom my-3">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Size</th>
+                                    <th scope="col">US</th>
+                                    <th scope="col">Bust</th>
+                                    <th scope="col">Waist</th>
+                                    <th scope="col">Hips</th>
+                                </tr>
+                            </thead>
+                            <tbody  id="e3">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between m-3">
+                            <h3>Shoes</h3>
+                            <div>
+                                <span>
+                                    <input type="radio" class="btn-check" name="se" id="inch2" autocomplete="off" checked>
+                                    <label class="btn btn-outline-dark" for="inch2">in</label>
+                                    <input type="radio" class="btn-check" name="se" id="cm2" autocomplete="off">
+                                    <label class="btn btn-outline-dark" for="cm2">cm</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <table class="table table-hover table-bordered m-2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Size</th>
+                                        <th scope="col">US</th>
+                                        <th scope="col">Foot Length</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="e4">
+                                    
+                                </tbody>
+                            </table>
+                            <table class="table table-hover table-bordered m-2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Size</th>
+                                        <th scope="col">US</th>
+                                        <th scope="col">Foot Length</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="e5">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="login">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="bi bi-person"></span>User Login</h2>
+                    <button data-bs-dismiss="modal" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        <dt>User Name</dt>
+                        <dd><input type="text" class="form-control"></dd>
+                        <dt>Password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dd style="text-align: center;"><a class="link-dark" href="#signin" data-bs-toggle="modal">
+                            New to Buy it ? Register here
+                        </a></dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" >Login</button>
+                    <button data-bs-dismiss="modal" class="btn btn-danger">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="signin">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="bi bi-person"></span>User Register</h2>
+                    <button data-bs-dismiss="modal" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        <dt class="form-text">Email Id</dt>
+                        <dd><input type="email" class="form-control"></dd>
+                        <dt class="form-text">Password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dt class="form-text">Confirm password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dt class="form-text">Phone Number</dt>
+                        <dd><input type="text" class="form-control"></dd>
+                        <dt class="form-text">Gender</dt>
+                        <dd>
+                            <input type="radio" class="form-check-input" id="male" name="gender">
+                            <label for="male" class="form-check-label">Male</label>
+                            <input type="radio" class="form-check-input" id="female" name="gender">
+                            <label for="female" class="form-check-label">Female</label>
+                            <input type="radio" class="form-check-input" id="others" name="gender">
+                            <label for="others" class="form-check-label">Others</label>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Register</button>
+                    <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="wishlist">
+        <div class="offcanvas-header border-bottom">
+            <h2 class="offcanvas-title">Wishlist</h2>
+            <button class="btn btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body m-2" >
+            <div id="wishinglistoffcanves">
+
+            </div>
+        </div>
+    </div>
+    <div style="margin: 30px 150px 30px 150px;" id="main3">
+
+    </div>
+    <section style="height: 500px;">
+        <ul class="nav justify-content-center border-bottom"  style="margin: 30px 150px 30px 150px;" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active text-dark" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" >Description</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link text-dark" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"  >Size &amp; Fit</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link text-dark" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" >Shipping &amp; Return</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active m-5" id="pills-home"  tabindex="0">
+                <p style="margin: 20px 300px 10px 300px;" class="text-muted">
+                    Won't herb first male seas, beast. Let upon, female upon third fifth every. Man subdue rule after years herb after form. And image may, morning. Behold in tree day sea that together cattle whose. Fifth gathering brought bearing. Abundantly creeping whose. Beginning form have void two. A whose.
+                </p>
+                <div style="margin: 20px 350px 10px 300px;">
+                    <div class="d-flex justify-content-between">
+                        <span class="d-flex"><h6 class="me-1">SKU: </h6><h6 class="text-muted">#61590437</h6></span>
+                        <span class="d-flex"><h6 class="me-1">Outer: </h6><h6 class="text-muted"> Leather 100%, Polyamide 100%</h6></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="d-flex"><h6 class="me-1">Occasion: </h6><h6 class="text-muted">Lifestyle, Sport</h6></span>
+                        <span class="d-flex"><h6 class="me-1">Lining:</h6><h6 class="text-muted">Polyester 100%</h6></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="d-flex"><h6 class="me-1">Country:</h6><h6 class="text-muted">Italy</h6></span>
+                        <span class="d-flex"><h6 class="me-1">CounSoletry: </h6><h6 class="text-muted">Rubber 100%</h6></span>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-profile"  tabindex="0">
+                <div style="margin: 20px 350px 10px 320px;">
+                    <div class="d-flex justify-content-around">
+                        <span>
+                            <h6>Fitting information:</h6>
+                            <ul>
+                                <li>Upon seas hath every years have whose <br>subdue creeping they're it were.</li>
+                                <li>Make great day bearing.</li>
+                                <li>For the moveth is days don't said days.</li>
+                            </ul>
+                        </span>
+                        <span>
+                            <h6>Model measurements:</h6>
+                            <ul style="list-style: none; margin-left: -60px;">
+                                <ul>Height: 1.80 m</ul>
+                                <ul>Bust/Chest: 89 cm</ul>
+                                <ul>Hips: 91 cm</ul>
+                                <ul>Waist: 65 cm</ul>
+                                <ul>Model size: M</ul>
+                            </ul>
+                            <span class="mt-3 ms-1">
+                                <span><img src="./public/icon-ruler.svg"> <a href="#sizechart" onclick="sizeschart()" data-bs-toggle="modal" class="ms-2" name="link1">Size chart</a></span>    
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-contact" tabindex="0">
+                <div style="margin: 20px 350px 10px 350px;">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <td>Shipping Options</td>
+                                <td>Delivery Time</td>
+                                <td>Price</td>
+                            </tr>
+                        </thead>
+                        <tbody class="text-muted">
+                            <tr>
+                                <td>Standard Shipping</td>
+                                <td>Delivery in 5 - 7 working days</td>
+                                <td>$8.00</td>
+                            </tr>
+                            <tr>
+                                <td>Express Shipping</td>
+                                <td>Delivery in 3 - 5 working days</td>
+                                <td>$12.00</td>
+                            </tr>
+                            <tr>
+                                <td>1 - 2 day Shipping</td>
+                                <td>Delivery in 1 - 2 working days</td>
+                                <td>$12.00</td>
+                            </tr>
+                            <tr>
+                                <td>Free Shipping</td>
+                                <td>Living won't the He one every subdue meat replenish face was you morning firmament darkness.</td>
+                                <td>$0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>May, life blessed night so creature likeness their, for. <u>Find out more</u></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="m-3">
+        <h2 class="text-center mb-2">You might also like</h2>
+        <div style="margin: 30px 120px 30px 120px;" class="d-flex flex-wrap justify-content-center text-muted"; id="main4">
+            
+        </div>
+    </section>
+    <div class="modal fade" id="dials">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content" style="width: auto;" id="Previewitems">
+                
+            </div>
+        </div>
+    </div>
+    <section class="m-5">
+        <h3 class="text-center p-2">Customer Reviews</h3>
+        <div style="margin: 30px 150px 30px 150px;" class="d-flex justify-content-between">
+            <div>
+                <span>Sort by:</span>
+                <span>
+                    <select style="border: none;" class="dropdown">
+                            <option class="dropdown-item">Newest</option>
+                            <option class="dropdown-item">Oldest</option>
+                    </select>
+                </span>
+            </div>
+            <div id="rating" class="d-flex"></div>
+            <div><button class="text-white bg-dark py-3" style="width: 150px;">Write Review</button></div>    
+        </div>
+        <div style="margin: 30px 150px 30px 150px;">
+            <div class="border d-flex m-1">
+                <div class="p-2">
+                    <img src="./public/images/avtar.jpg" alt="refersh" width="150px" height="150px">
+                </div>
+                <div style="margin: 30px 30px 30px 30px;">
+                    <div>
+                        <span class="bi bi-star-fill"></span>
+                        <span class="bi bi-star-fill"></span>
+                        <span class="bi bi-star-fill"></span>
+                        <span class="bi bi-star-fill"></span>
+                        <span class="bi bi-star-fill"></span>
+                    </div>
+                    <div>
+                        Logan Edwards, 25 Jul 2019
+                    </div>
+                    <div class="my-5">
+                        <h5>So cute!</h5>
+                        <p>Justo ut diam erat hendrerit. Morbi porttitor, per eu. Sodales curabitur diam sociis. Taciti lobortis nascetur. Ante laoreet odio hendrerit. Dictumst curabitur nascetur lectus potenti dis sollicitudin habitant quis vestibulum.</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                            <h6>Was this review helpful?</h6>
+                            <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-up ms-2" ></button>
+                            <h6 id="like"></h6>
+                            <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-down ms-2" ></button>
+                            <h6 id="dislike"></h6>
+                        </div>
+                        <div>
+                            <span>Comments(0)</span>
+                            <button class="btn btn-outline-dark">comment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border m-1">
+                <div class="d-flex m-1">
+                    <div class="p-2">
+                        <img src="./public/images/avtar.jpg" alt="refersh" width="150px" height="150px">
+                    </div>
+                    <div style="margin: 30px 30px 30px 30px;">
+                        <div>
+                            <span class="bi bi-star-fill"></span>
+                            <span class="bi bi-star-fill"></span>
+                            <span class="bi bi-star-fill"></span>
+                            <span class="bi bi-star"></span>
+                            <span class="bi bi-star"></span>
+                        </div>
+                        <div>
+                            Sophie Casey, 07 Jul 2019
+                        </div>
+                        <div class="my-5">
+                            <h5>Cute, but too small</h5>
+                            <p>Shall good midst can't. Have fill own his multiply the divided. Thing great. Of heaven whose signs.Sodales curabitur diam sociis. Taciti lobortis nascetur.</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex">
+                                <h6>Was this review helpful?</h6>
+                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-up ms-2" ></button>
+                                <h6 id="like"></h6>
+                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-down ms-2" ></button>
+                                <h6 id="dislike"></h6>
+                            </div>
+                            <div>
+                                <span>Comments(1)</span>
+                                <button class="btn btn-outline-dark">comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-top d-flex m-2">
+                    <div class="p-2">
+                        <span class="bi bi-arrow-return-right"></span>
+                        <img src="./public/images/avtar.jpg" alt="refersh" width="150px" height="150px">
+                    </div>
+                    <div style="margin: 30px 30px 30px 30px;">
+                        <div>
+                            <span class="bi bi-star-fill"></span>
+                            <span class="bi bi-star-fill"></span>
+                            <span class="bi bi-star-fill"></span>
+                            <span class="bi bi-star-fill"></span>
+                            <span class="bi bi-star"></span>
+                        </div>
+                        <div>
+                            William Stokes, 14 Jul 2019
+                        </div> 
+                        <div class="my-5">
+                            <h5>Very good</h5>
+                            <p>Made face lights yielding forth created for image behold blessed seas.</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex">
+                                <h6>Was this review helpful?</h6>
+                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-up ms-2" ></button>
+                                <h6 id="like"></h6>
+                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-down ms-2" ></button>
+                                <h6 id="dislike"></h6>
+                            </div>
+                            <div>
+                                <span>Comments(0)</span>
+                                <button class="btn btn-outline-dark">comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="m-5 d-flex justify-content-center" id="pagenation">
+        <a href="#" class="m-1"><i class="bi bi-caret-left-fill"></i></a>
+        <a href="#" class="m-1 active">1</a>
+        <a href="#" class="m-1">2</a>
+        <a href="#" class="m-1">3</a>
+        <a href="#" class="m-1"><i class="bi bi-caret-right-fill"></i></a>
+    </div>
+    <div class="d-flex justify-content-around border-bottom py-5 bg-light">
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-truck text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">FREE SHOPPING</span>
+            </div>
+            <div class="ms-4" style="color: grey;">From all orders over $100</div>
+        </div>
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-arrow-left-right text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">FREE RETURNS</span>
+            </div>
+            <div class="ms-4" style="color: grey;">Return money within 30 days</div>
+        </div>
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-lock text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">SECURE SHOPPING</span>
+            </div>
+            <div class="ms-4" style="color: grey;">You're in safe hands</div>
+        </div>
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-tag text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">OVER 10,000 STYLES</span>
+            </div>
+            <div class="ms-4" style="color: grey;">We have everything you need</div>
+        </div>
+    </div>
+    <footer class="container-fluid bg-black" style="color: white; position: relative; width: auto;">
+        <div style="padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div class="m-4 fs-4">Want style Ideas and Treats?</div>
+            <div class="m-2 fs-5 d-flex">
+                <input class="text-bg-dark p-2 me-2" style="border-style: none; width: auto;" type="email" placeholder="Enter Email*">
+                <button class="text-white p-2" style="background-color: grey; border-style: none;">Subscribe</button>
+            </div>
+            <div class="d-flex flex-wrap m-5" style="color: grey; width: auto;">
+                <div>
+                    <h2 style="color: white;">Shopper.</h2>
+                    <div>
+                        <span class="bi bi-facebook"></span>
+                        <span class="bi bi-youtube"></span>
+                        <span class="bi bi-twitter"></span>
+                        <span class="bi bi-instagram"></span>
+                        <span class="bi bi-medium"></span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="ms-5" >
+                        <h6 style="color: white;">SUPPORT</h6>
+                        <div>Contact Us</div>
+                        <div>FAQs</div>
+                        <div>Size Guide</div>
+                        <div>Shipping &amp; Returns</div>
+                    </div>
+                    <div class="ms-5">
+                        <h6 style="color: white;">SHOP</h6>
+                        <div>Men's Shopping</div>
+                        <div>Women's Shopping</div>
+                        <div>Kids' Shopping</div>
+                        <div>Discounts</div>
+                    </div>
+                    <div class="ms-5">
+                        <h6 style="color: white;">COMPANY</h6>
+                        <div>Our Story</div>
+                        <div>Careers</div>
+                        <div>Terms &amp; Conditions</div>
+                        <div>Privacy &amp; Cookie policy</div>
+                    </div>
+                </div>
+                <div class="ms-5">
+                    <h6 style="color: white;">CONTACT</h6>
+                    <address>
+                        <div>1-202-555-0105</div>
+                        <div>1-202-555-0106</div>
+                        <div>help@shopper.com</div>
+                    </address>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap justify-content-between border-top">
+            <h6 style="color: grey;" class="m-2">© 2019 All rights reserved. Designed by Unvab.</h6>
+            <div class="m-2">
+                <img src="./public/images/Screenshot 2023-04-07 130144.jpg">
+            </div>
+        </div>
+    </footer>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 </body>
 </html>
