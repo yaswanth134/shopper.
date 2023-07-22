@@ -8,6 +8,66 @@
     <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
     <style>
+        .rating {
+            --dir: right;
+            --fill: black;
+            --fillbg: rgba(100, 100, 100, 0.15);
+            --star: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.25l-6.188 3.75 1.641-7.031-5.438-4.734 7.172-0.609 2.813-6.609 2.813 6.609 7.172 0.609-5.438 4.734 1.641 7.031z"/></svg>');
+            --stars: 5;
+            --starsize: 2rem;
+            --symbol: var(--star);
+            --value: 1;
+            --w: calc(var(--stars) * var(--starsize));
+            --x: calc(100% * (var(--value) / var(--stars)));
+            block-size: var(--starsize);
+            inline-size: var(--w);
+            position: relative;
+            touch-action: manipulation;
+            -webkit-appearance: none;
+        }
+        .rating::-moz-range-track {
+            background: linear-gradient(to var(--dir), var(--fill) 0 var(--x), var(--fillbg) 0 var(--x));
+            block-size: 100%;
+            mask: repeat left center/var(--starsize) var(--symbol);
+        }
+        .rating::-webkit-slider-runnable-track {
+            background: linear-gradient(to var(--dir), var(--fill) 0 var(--x), var(--fillbg) 0 var(--x));
+            block-size: 100%;
+            mask: repeat left center/var(--starsize) var(--symbol);
+            -webkit-mask: repeat left center/var(--starsize) var(--symbol);
+        }
+        .rating::-moz-range-thumb {
+            height: var(--starsize);
+            opacity: 0;
+            width: var(--starsize);
+        }
+        .rating::-webkit-slider-thumb {
+            height: var(--starsize);
+            opacity: 0;
+            width: var(--starsize);
+            -webkit-appearance: none;
+        }
+        .rating-label {
+            margin-block-end: 1rem;
+        }
+        /* NO JS */
+        .rating--nojs::-moz-range-track {
+            background: var(--fillbg);
+        }
+        .rating--nojs::-moz-range-progress {
+            background: var(--fill);
+            block-size: 100%;
+            mask: repeat left center/var(--starsize) var(--star);
+        }
+        .rating--nojs::-webkit-slider-runnable-track {
+            background: var(--fillbg);
+        }
+        .rating--nojs::-webkit-slider-thumb {
+            background-color: var(--fill);
+            box-shadow: calc(0rem - var(--w)) 0 0 var(--w) var(--fill);
+            opacity: 1;
+            width: 1px;
+        }
         #pagenation a{
             padding: 10px;
         }
@@ -56,6 +116,12 @@
         }
     </style>
     <script>
+        let sos=3;
+        let sos1=2;
+        let sos2=1;
+        let a=0;
+        let a1=1;
+        let a2=2;
          var list1=[
             {"image":"../public/images/Leather%20mid-heel%20Sandals.jpg","color":"Brown","image2":"./public/images/Leather mid-heel Sandals1.jpg","desc":"Shoes","title":"Leather mid-heel Sandals","price":"$129.00","stars":4},
             {"desc":"Dresses","title":"Cotton floral print Dress","color":"Pink","image2":"./public/images/product-6.jpg","price":"$40.00","image":"./public/images/dress.jpg","stars":5},
@@ -75,6 +141,8 @@
             let s=x;
             reamaningcards(s);
             ratingstarscomm(list1[s].stars);
+            liketo(0);
+            unliketo(0);
         }
         function ratingstarscomm(l){
             for(let i=0;i<l;i++){
@@ -583,6 +651,48 @@
                 else{
                     continue;
                 }
+            }
+        }
+        function liketo(i){
+            switch(i){
+                case 1:
+                    sos=sos+1;
+                    document.getElementById("like").innerHTML=sos;
+                    break;
+                case 2:
+                    sos1=sos1+1;
+                    document.getElementById("like1").innerHTML=sos1;
+                    break;
+                case 3:
+                    sos2=sos2+1;
+                    document.getElementById("like2").innerHTML=sos2;
+                    break;
+                default:
+                    document.getElementById("like").innerHTML=sos;
+                    document.getElementById("like1").innerHTML=sos1;
+                    document.getElementById("like2").innerHTML=sos2;
+                    break;
+            }
+        }
+        function unliketo(i){
+            switch(i){
+                case 1:
+                    a=a+1;
+                    document.getElementById("dislike").innerHTML=a+1;
+                    break;
+                case 2:
+                    a1=a1+1;
+                    document.getElementById("dislike1").innerHTML=a1;
+                    break;
+                case 3:
+                    a2=a2+1;
+                    document.getElementById("dislike2").innerHTML=a2;
+                    break;
+                default:
+                    document.getElementById("dislike").innerHTML=a;
+                    document.getElementById("dislike1").innerHTML=a1;
+                    document.getElementById("dislike2").innerHTML=a2;
+                    break;
             }
         }
         function popwishlist(index){
@@ -1189,7 +1299,7 @@
     </div>
     <section class="m-5">
         <h3 class="text-center p-2">Customer Reviews</h3>
-        <div style="margin: 30px 150px 30px 150px;" class="d-flex justify-content-between">
+        <div style="margin: 30px 150px 30px 150px;" class="d-flex justify-content-between border-bottom">
             <div>
                 <span>Sort by:</span>
                 <span>
@@ -1200,7 +1310,24 @@
                 </span>
             </div>
             <div id="rating" class="d-flex"></div>
-            <div><button class="text-white bg-dark py-3" style="width: 150px;">Write Review</button></div>    
+            <div><a class="btn text-white bg-dark py-3 m-2" style="width: 150px;" data-bs-toggle="collapse" href="#reviewwriter">Write Review</a></div>    
+        </div>
+        <div class="collapse" style="margin: 30px 150px 30px 150px;" id="reviewwriter">
+            <h6 class="text-center">Score:</h6>
+            <div class="d-flex justify-content-center m-3">
+                <input class="rating rating--nojs" type="range" min="0" max="5" step="1">
+
+            </div>
+            <form class="d-flex flex-column justify-content-center">
+                <div class="d-flex justify-content-between my-2">
+                    <input type="text" name="" id="" placeholder="Your Name*" style="width: 520px; padding: 15px;">
+                    <input type="text" name="" id="" placeholder="Your Email*" style="width: 520px; padding: 15px;">
+                </div>
+                <input type="text" name="" id="" placeholder="Review Title*" class="p-3 my-2">
+                <textarea name="" id="textarea1" cols="10" rows="10" class="my-2 p-3" placeholder="Review*"></textarea>
+                <label for="textarea1" class="visually-hidden">Review*</label>
+                <button class="btn btn-outline-dark" style="width: 150px; place-self: center;">Post Review</button>
+            </form>
         </div>
         <div style="margin: 30px 150px 30px 150px;">
             <div class="border d-flex m-1">
@@ -1225,9 +1352,9 @@
                     <div class="d-flex justify-content-between">
                         <div class="d-flex">
                             <h6>Was this review helpful?</h6>
-                            <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-up ms-2" ></button>
+                            <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-up ms-2" onclick="liketo(1)"></button>
                             <h6 id="like"></h6>
-                            <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-down ms-2" ></button>
+                            <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-down ms-2" onclick="unliketo(1)"></button>
                             <h6 id="dislike"></h6>
                         </div>
                         <div>
@@ -1260,10 +1387,10 @@
                         <div class="d-flex justify-content-between">
                             <div class="d-flex">
                                 <h6>Was this review helpful?</h6>
-                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-up ms-2" ></button>
-                                <h6 id="like"></h6>
-                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-down ms-2" ></button>
-                                <h6 id="dislike"></h6>
+                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-up ms-2" onclick="liketo(2)"></button>
+                                <h6 id="like1"></h6>
+                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-down ms-2" onclick="unliketo(2)"></button>
+                                <h6 id="dislike1"></h6>
                             </div>
                             <div>
                                 <span>Comments(1)</span>
@@ -1295,10 +1422,10 @@
                         <div class="d-flex justify-content-between">
                             <div class="d-flex">
                                 <h6>Was this review helpful?</h6>
-                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-up ms-2" ></button>
-                                <h6 id="like"></h6>
-                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-down ms-2" ></button>
-                                <h6 id="dislike"></h6>
+                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-up ms-2" onclick="liketo(3)"></button>
+                                <h6 id="like2"></h6>
+                                <button style="margin-top: -8px;" class="btn bi bi-hand-thumbs-down ms-2" onclick="unliketo(3)"></button>
+                                <h6 id="dislike2"></h6>
                             </div>
                             <div>
                                 <span>Comments(0)</span>
