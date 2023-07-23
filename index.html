@@ -71,18 +71,6 @@
         #rd div:hover div{
             display: block;
         }
-        div[name="r5"] div{
-            display: none;
-        }
-        div[name="r5"]:hover div{
-            display: block;
-        }
-        div[name='r4']{
-            background-color: white;
-        }
-        div[name="r4"]:hover{
-            background-color: tomato;
-        }
         div[name="r1"]{
             display: none;
         }
@@ -92,6 +80,7 @@
         div[name="r3"]{
             background-color: white;
             font-size: large;
+            display: none;
         }
         div[name="r3"]:hover{
             background-color: tomato;
@@ -492,8 +481,12 @@
 
             })
         }
-        function goingto(){
-            
+        function sdc(s){
+            localStorage.setItem("item",s);
+            window.location.href='./cartpage.html';
+            // document.getElementById(a.id).addEventListener("click",function(event){ 
+            //     window.location.href="./cartpage.html";
+            // })
         }
         function cartclick(){
             if(cartitems.length!==0){
@@ -877,12 +870,14 @@
                     <div class="me-5 ms-2 mb-3">
                         <div style="position: relative; background-image: url(./public/images/Leather\ mid-heel\ Sandals.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
                             <div class="badge bg-white text-dark" style="position: absolute; top: 22px; left: -1px;">New</div>
-                            <div style="position: relative; background-image: url(./public/images/Leather\ mid-heel\ Sandals1.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                            <div style="cursor: pointer; position: relative; background-image: url(./public/images/Leather\ mid-heel\ Sandals1.jpg); background-size: cover; height: 270px; width: 240px;" name="r1"  onclick="sdc(0)">
                                 <div class="badge bg-white text-dark" style="position: absolute; top: 22px; left: -1px;">New</div>
+                            </div>
+                            <div>       
                                 <a href="#dials" onclick="Preview(0)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
                                 <a onclick="addtoclick(0)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
                                 <a onclick="clicktowish(0)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
-                            </div>
+                            </div>   
                         </div>
                         <div>Shoes</div>
                         <div style="color:black"><b>Leather mid-heel Sandals</b></div>
@@ -890,11 +885,13 @@
                     </div>
                     <div class="me-5 ms-2 mb-3">
                         <div style="position: relative; background-image: url(./public/images/dress.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
-                            <div style="background-image: url(./public/images/product-6.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                            <div style="cursor: pointer; background-image: url(./public/images/product-6.jpg); background-size: cover; height: 270px; width: 240px;" name="r1"  onclick="sdc(1)">
+                            </div>
+                            <div>       
                                 <a href="#dials" onclick="Preview(1)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
                                 <a onclick="addtoclick(1)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
                                 <a onclick="clicktowish(1)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
-                            </div>
+                            </div>   
                         </div>
                         <div>Dresses</div>
                         <div style="color:black"><b>Cotton floral print Dress</b></div>
@@ -902,7 +899,9 @@
                     </div>
                     <div class="me-5 ms-2 mb-3">
                         <div style="position: relative; background-image: url(./public/images/shoes.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
-                            <div style="background-image: url(./public/images/product-122.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                            <div style="cursor: pointer; background-image: url(./public/images/product-122.jpg); background-size: cover; height: 270px; width: 240px;" name="r1" onclick="sdc(2)">
+                            </div>
+                            <div>
                                 <a href="#dials" onclick="Preview(2)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
                                 <a onclick="addtoclick(2)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
                                 <a onclick="clicktowish(2)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
@@ -913,10 +912,13 @@
                         <div><b><strike class="text-danger me-1">$85.00</strike>$40.00</b></div>
                     </div>
                     <div class="me-5 ms-2 mb-3">
-                        <div style="position: relative; background-image: url(./public/images/tops.jpg); background-size: cover; height: 270px; width: 240px;" name="r5">
-                            <a href="#dials" onclick="Preview(3)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r4"><span class="bi-eye text-dark"></span></div></a>
-                            <a onclick="addtoclick(3)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r4"><span class="bi-cart text-dark"></span></div></a>
-                            <a onclick="clicktowish(3)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r4"><span class="bi-heart text-dark"></span></div></a>
+                        <div style="cursor: pointer; position: relative; background-image: url(./public/images/tops.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
+                            <div style="cursor: pointer; height: 270px; width: 240px;" name="r1" onclick="sdc(3)"></div>
+                            <div>
+                                <a href="#dials" onclick="Preview(3)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                <a onclick="addtoclick(3)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                <a onclick="clicktowish(3)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                            </div>
                         </div>
                         <div>Tops</div>
                         <div style="color:black"><b>Cropped cotton Top</b></div>
@@ -925,10 +927,13 @@
                 </div>
                 <div class="d-flex flex-wrap justify-content-center text-muted">
                     <div class="me-5 ms-2 mb-3">
-                        <div style="position: relative; background-image: url(./public/images/dresses.jpg); background-size: cover; height: 270px; width: 240px;" name="r5">
-                            <a href="#dials" onclick="Preview(4)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r4"><span class="bi-eye text-dark"></span></div></a>
-                            <a onclick="addtoclick(4)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r4"><span class="bi-cart text-dark"></span></div></a>
-                            <a onclick="clicktowish(4)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r4"><span class="bi-heart text-dark"></span></div></a>
+                        <div style="position: relative; background-image: url(./public/images/dresses.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
+                            <div style="cursor: pointer;  height: 270px; width: 240px;" name="r1" onclick="sdc(4)"></div>
+                            <div>
+                                <a href="#dials" onclick="Preview(4)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
+                                <a onclick="addtoclick(4)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
+                                <a onclick="clicktowish(4)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                            </div>
                         </div>
                         <div>Dresses</div>
                         <div style="color:black"><b>Floral print midi Dress</b></div>
@@ -936,7 +941,9 @@
                     </div>
                     <div class="me-5 ms-2 mb-3">
                         <div style="position: relative; background-image: url(./public/images/bags.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
-                            <div style="background-image: url(./public/images/product-123.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                            <div style="cursor: pointer;  background-image: url(./public/images/product-123.jpg); background-size: cover; height: 270px; width: 240px;" name="r1" onclick="sdc(5)">
+                            </div>
+                            <div>
                                 <a href="#dials" onclick="Preview(5)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
                                 <a onclick="addtoclick(5)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
                                 <a onclick="clicktowish(5)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
@@ -948,7 +955,9 @@
                     </div>
                     <div class="me-5 ms-2 mb-3">
                         <div style="position: relative; background-image: url(./public/images/skirts.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
-                            <div style="background-image: url(./public/images/product-124.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                            <div style="cursor: pointer;  background-image: url(./public/images/product-124.jpg); background-size: cover; height: 270px; width: 240px;" name="r1" onclick="sdc(6)">
+                            </div>
+                            <div>
                                 <a href="#dials" onclick="Preview(6)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
                                 <a onclick="addtoclick(6)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
                                 <a onclick="clicktowish(6)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
@@ -961,11 +970,13 @@
                     <div class="me-5 ms-2 mb-3">
                         <div style="position: relative; background-image: url(./public/images/shoes2.jpg); background-size: cover; height: 270px; width: 240px;" name="r2">
                             <div class="badge bg-white text-dark" style="position: absolute; top: 22px; left: -1px;">New</div>
-                            <div style="position: relative; background-image: url(./public/images/shoes2.jpg); background-size: cover; height: 270px; width: 240px;" name="r1">
+                            <div style="cursor: pointer;  position: relative; height: 270px; width: 240px;" name="r1" onclick="sdc(7)">
                                 <div class="badge bg-white text-dark" style="position: absolute; top: 22px; left: -1px;">New</div>
+                            </div>
+                            <div>
                                 <a href="#dials" onclick="Preview(7)" data-bs-toggle="modal"><div class="badge rounded rounded-circle " style="position: absolute; top: 230px; left: 40px; font-size: large;" name="r3"><span class="bi-eye text-dark"></span></div></a>
                                 <a onclick="addtoclick(7)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 90px; font-size: large;" name="r3"><span class="bi-cart text-dark"></span></div></a>
-                                <a onclick="clicktowish(7)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a>
+                                <a onclick="clicktowish(7)"><div class="btn badge rounded rounded-circle " style="position: absolute; top: 230px; left: 140px; font-size: large;" name="r3"><span class="bi-heart text-dark"></span></div></a> 
                             </div>
                         </div>
                         <div>Shoes</div>
