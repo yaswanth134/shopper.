@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopper</title>
+    <link rel="shortcut icon" href="./public/images.gif">
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        #searchbar{
+            display: none;
+        }
+        #suggestions{
+            background-color: whitesmoke;
+            position: absolute;
+            z-index: 99;
+        }
+        a{
+            
+            cursor: pointer;
+        }
+        iframe{
+            border: none;
+            height: 600px;
+            width: 600px;
+        }   
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        li{
+            padding: 5px;
+        }
+        #home a{
+            color: black;
+        }
+        #home a:hover{
+            color: red;
+        }
+        #op:hover{
+            opacity: 0.8;
+        }
+        #homesec a:hover{
+            color: red;
+            text-decoration-line: underline;
+        }
+        div[name="cover1"]:hover{
+            opacity: 0.8;
+        }
+        a[name="banner"]:hover{
+            margin-left: 4px;
+        }
+        a[name="banner"]:hover span{
+            margin-left: 4px;
+        }
+        #usnder{
+            margin-left: 670px;
+            margin-right: 670px;
+        }
+        #usnder:hover{
+            border-bottom: 1px black solid;
+            transition: 2s;
+        }
+        #btn3:hover span{
+            margin-left: 5px;
+        }
+        #logoes span{
+            margin: 30px;
+        }
+        #rd div{
+            margin: 5px;
+        }
+        #rd div div{
+            display: none;
+            color: whitesmoke;
+        }
+        #rd div:hover div{
+            display: block;
+        }
+    </style>
+    <script>
+        var list1=[
+            {"image":"../public/images/Leather%20mid-heel%20Sandals.jpg","color":"Brown","image2":"./public/images/Leather mid-heel Sandals1.jpg","desc":"Shoes","title":"Leather mid-heel Sandals","price":129.00},
+            {"desc":"Dresses","title":"Cotton floral print Dress","color":"Pink","image2":"./public/images/product-6.jpg","price":40.00,"image":"./public/images/dress.jpg"},
+            {"desc":"Shoes","image":"./public/images/shoes.jpg","color":"Blue","image2":"./public/images/product-122.jpg","title":"Leather Sneakers","price":85.00},
+            {"desc":"Tops","image":"../public/images/tops.jpg","color":"White","image2":"./public/images/tops2.jpg","title":"Cropped cotton Top","price":29.00},
+            {"image":"../public/images/dresses.jpg","color":"Yellow","image2":"./public/images/dresses2.jpg","desc":"Dresses","title":"Floral print midi Dress","price":50.00},
+            {"image":"../public/images/bags.jpg","color":"Brown","image2":"./public/images/product-123.jpg","desc":"Bags","title":"Suede cross body Bag","price":49.00},
+            {"image":"../public/images/skirts.jpg","color":"White-Black","image2":"./public/images/product-124.jpg","desc":"Skirts","title":"Printed A-line Skirt","price":79.00},
+            {"image":"../public/images/shoes2.jpg","color":"Brown","image2":"./public/images/shoes2-1.jpg","desc":"Shoes","title":"Heel strappy Sandals","price":90.00}
+        ];
+        var cartitems=[];
+        function bodyload(){
+            //LoadCategories();
+            //loadproducts("https://fakestoreapi.com/products");
+            displaynonedown(0);
+            getcartcount(0);
+            //csa1(); 
+            autocomplete(document.getElementById('input'), list1);
+            
+        }
+        function getcartcount(i){
+            if(i===0){
+                var cartlen=localStorage.getItem('cardnumber');
+                document.getElementById('cartid').innerText=cartlen;
+                
+                if(cartlen===0){
+                    cartclick();
+                    console.log("here");
+                }
+                else{
+                    AddClick();
+                } 
+            }
+            else{
+                document.getElementById('cartid').innerText=cartitems.length; 
+                document.getElementById("ordercount").innerHTML=`
+                    (${cartitems.length})
+                `;
+                orderdisplay(); 
+            }
+        }
+        function popclick(js){
+            console.log(js);
+            cartitems.splice(js,1);
+            cartclick();
+            getcartcount(1);
+        }
+        function ctoc(){
+            window.location.href="./checkoutpage.html";
+        }
+        function AddClick(){
+            var id=[];
+            id.push(localStorage.getItem('cartpr'));
+            console.log(id.length);
+            let str=localStorage.getItem('msg1');
+            if(str==='products'){
+                var res=id[0].split(',');
+                for(var i=0;i<res.length;i++){
+                    fetch(`http://fakestoreapi.com/products/${res[i]}`)
+                    .then(function(res){
+                        return res.json();
+                    })
+                    .then(function(product){
+                        cartitems.push(product);
+                        reamingcart();
+                        getcartcount(1);
+                    })
+                }
+            }
+            else{
+                getcartcount(1);
+                reamingcart();
+            }
+        }
+        function reamingcart(){
+            let indexes = [];
+            indexes.push(localStorage.getItem('list1cart'));
+            let str=localStorage.getItem('msg');
+            if(str==='products'){
+                var res=indexes[0].split(',');
+                console.log(res);
+                for(let i=0;i<list1.length;i++){
+                    res.map(function(index){
+                        console.log(index)
+                        if(index==i){
+                            cartitems.push(list1[i]);
+                            cartclick();
+                            getcartcount(1); 
+                        }
+                    })
+                }
+            }
+        }
+        function orderdisplay(){
+            document.getElementById("orderdisplay1").innerHTML="";
+            cartitems.map(function(res){
+                var div=document.createElement('div');
+                div.className="border-top py-2 d-flex";
+                div.innerHTML=`
+                    <div class="m-2"><img src="${res.image}" width="100px" height="100px"></div>
+                    <div class="m-2">
+                        <h6>${res.title}</h6>   
+                        <h6 class="text-muted">&dollar;${res.price}</h6>
+                    </div>
+                `;
+                document.getElementById("orderdisplay1").appendChild(div);
+            })
+            pricedisplay1(8);
+            function pricedisplay1(z){
+                document.getElementById("pricedisplay1").innerHTML="";
+                let pr=0;
+                cartitems.map(function(res){
+                    pr=pr+res.price;
+                })
+                let ul=document.createElement('ul');
+                ul.className="list-group"
+                let liprice=document.createElement('li');
+                let litax=document.createElement('li');
+                let lishipping=document.createElement('li');
+                let litotal=document.createElement('li');
+                liprice.className="border-bottom d-flex justify-content-between py-2";
+                liprice.innerHTML=`
+                    <h6>Subtotal</h6>
+                    <h6>&dollar;${pr}</h6>
+                `;
+                litax.className="border-bottom d-flex justify-content-between py-2";
+                litax.innerHTML=`
+                    <h6>Tax</h6>
+                    <h6>&dollar;00.00</h6>
+                `;
+                lishipping.className="border-bottom d-flex justify-content-between py-2";
+                lishipping.innerHTML=`
+                    <h6>Shipping</h6>
+                    <h6>&dollar;${z}.00</h6>
+                `;
+                let si=z;
+                si=pr+si;
+                let number=si.toFixed(2);
+                litotal.className="d-flex justify-content-between pt-2";
+                litotal.innerHTML=`
+                    <h5>Total</h5>
+                    <h5>&dollar;${number}</h5>
+                `;
+                ul.appendChild(liprice);
+                ul.appendChild(litax);
+                ul.appendChild(lishipping);
+                ul.appendChild(litotal);
+                document.getElementById("pricedisplay1").appendChild(ul);
+            }
+        }
+        function autocomplete(input, list) {
+            //Add an event listener to compare the input value with all countries
+            input.addEventListener('input', function () {
+                //Close the existing list if it is open
+                closeList();
+
+                //If the input is empty, exit the function
+                if (!this.value){
+                    return;
+                }
+                //Create a suggestions <div> and add it to the element containing the input field
+                suggestions = document.createElement('div');
+                suggestions.setAttribute('id', 'suggestions');
+                this.parentNode.appendChild(suggestions);
+                
+                //Iterate through all entries in the list and find matches
+                for (let i=0; i<list.length; i++) {
+                    if (list[i].desc.toUpperCase().includes(this.value.toUpperCase())) {
+                        //If a match is foundm create a suggestion <div> and add it to the suggestions <div>
+                        suggestion = document.createElement('ul');
+                        suggestion.style="list-style: none; margin: 0px 0px 2px -25px";
+                        suggestion.innerHTML = `
+                            <li>
+                                <a onclick="sdc(${i})">${list[i].title}</a>
+                                <img src="${list[i].image}" width="30px" height="30px">
+                            </li>
+                        `;
+                        suggestions.appendChild(suggestion);
+                    }
+                }
+
+            });
+            function closeList() {
+                let suggestions = document.getElementById('suggestions');
+                if (suggestions)
+                    suggestions.parentNode.removeChild(suggestions);
+            }
+        }
+        function displaynonedown(x){
+            switch(x){
+                case 1:
+                    document.getElementById('ds').style='display:none;';
+                    break;
+                case 2:
+                     document.getElementById('catlog').style='display:none';
+                     break;
+                case 3:
+                    document.getElementById('pages').style='display:none';
+                    break;
+                case 4:
+                    document.getElementById('blog').style='display:none';
+                    break;
+                default:
+                    document.getElementById('ds').style='display:none;';
+                    document.getElementById('catlog').style='display:none';
+                    document.getElementById('pages').style='display:none';
+                    document.getElementById('blog').style='display:none';
+            }
+        }
+        function cartclick(){
+            let pr=0.00;
+            if(cartitems.length!==0){
+                document.getElementById("tbb").innerHTML="";
+                cartitems.map(function(product){
+                    var tr=document.createElement('tr');
+                    var tdTitle=document.createElement('td');
+                    var tdpreview=document.createElement('td');
+                    var tdprice=document.createElement('td');
+                    var tdcross=document.createElement('td');
+                    tdTitle.innerHTML=product.title;
+                    tdpreview.innerHTML=`<img src=${product.image} width="50px" height="50px">`;
+                    tdprice.innerHTML=product.price;
+                    tdcross.innerHTML=`<button class="btn-close" onclick="popclick(${cartitems.indexOf(product)})"></button>`;
+                    pr=pr+product.price;
+                    tr.appendChild(tdTitle);
+                    tr.appendChild(tdpreview);
+                    tr.appendChild(tdprice);
+                    tr.appendChild(tdcross);
+                    document.getElementById('tbb').appendChild(tr);
+                })
+                document.getElementById("std").innerHTML=pr;
+            }
+            else{
+                let pr=0;
+                document.getElementById("std").innerHTML=pr+".00";
+                document.getElementById("tbb").innerHTML=`<tr>
+                        <td>nothing added to cart</td>
+                    </tr>`;
+            }
+        }
+        function displaydropdown(y){
+            switch(y){
+                case 1:
+                     document.getElementById('ds').style='display:block; position:absolute; top:60px;';
+                     break;
+                case 2:
+                    document.getElementById('catlog').style='position:absolute; top:60px; left:0px; display:block;'; 
+                    break;
+                case 3:
+                    document.getElementById('pages').style='display:block; position:absolute; top:60px;'; 
+                    break;
+                case 4:
+                    document.getElementById('blog').style='display:block; position:absolute; top:60px;';
+                    break;
+            }
+        }
+        function addside(cp){
+            if(cp===1)
+            {
+                document.getElementById('coverwomen').style="margin-left:4px;";
+            }
+            else if(cp===2){
+                document.getElementById('covermen').style="margin-left:4px;";
+            }
+            else if(cp===3){
+                document.getElementById('coverkids').style="margin-left:4px;";
+            }
+            else {
+                document.getElementById('ra').style="margin-left:4px;";
+            }
+        }
+        function clicktowishing(){
+            document.getElementById('wishinglistoffcanves').innerHTML="";
+            const iterator=wishlist.values();
+            wishlist.forEach(function(product){
+                let div=document.createElement('div');
+                div.className="container-fluid d-flex m-2";
+                div.innerHTML=`
+                    <div><img src="${product.image}" width="150px" height="200px"></div>
+                    <div class="m-2"> 
+                        <h5>${product.title}</h5>
+                        <h4>${product.desc}</h4>
+                        <h6 class="text-muted">&dollar${product.price}</h6>
+                        <span class="btn btn-outline-dark bi bi-trash mt-1" onclick="popwishlist('${product.title}')"></span>
+                        <button class="btn btn-outline-dark" onclick="movetocart('${product.title}')">Move To Cart</button>
+                    </div>
+                `;
+                document.getElementById('wishinglistoffcanves').appendChild(div);
+
+            })
+        }
+        function lessside(cp){
+            if(cp===1){
+                document.getElementById('coverwomen').style="margin-left:-4px;";
+            }
+            else if(cp===2){
+                document.getElementById('covermen').style="margin-left:-4px;";
+            }
+            else if(cp===3){
+                document.getElementById('coverkids').style="margin-left:-4px;";
+            }
+            else{
+                 document.getElementById('ra').style='margin-left:-4px;';
+            }
+        }
+        function disapper(m){
+            if(m===0){
+                document.getElementById("searchbar").style="display:block;";
+                document.getElementById("raj").style="display:none;";
+            }
+            else{
+                document.getElementById("searchbar").style="display:none;";
+                document.getElementById("raj").style="display:block;";
+            }
+        }
+    </script>
+</head>
+<body class="container-fluid" onload="bodyload()">
+    <header class="border-bottom">
+        <div class="navbar navbar-expand-lg text-dark bg-white" >
+            <div class="container-fluid">
+                <div class="navbar-brand"><a href="./index.html"><h2>Shopper.</h2></a></div>
+                <div class="naba" style="margin-right: -70px;">
+                    <ul class="navbar-nav navbar-collapse collapse" id="home">
+                        <li class="nav-item" onmouseover="displaydropdown(1)" onmouseout="displaynonedown(1)"><a class="nav-link"><h6>New & featuring</h6></a>
+                            <ul class="dropdown-menu card card-body" id="ds">
+                                <li class="dropdown-item-text"><a href="./searchpage.html">New Arrival</a></li>
+                                <li class="dropdown-item-text"><a>Best Seller</a></li>
+                                <li class="dropdown-item-text"><a>Latest Clothing</a></li>
+                                <li class="dropdown-item-text"><a>Latest Shoes</a></li>
+                                <li class="dropdown-item-text"><a>Exclusive</a></li>
+                                <li class="dropdown-item-text"><a>Customise</a></li>
+                            </ul>   
+                        </li>
+                        <li class="nav-item" onmouseover="displaydropdown(2)" onmouseout="displaynonedown(2)"><a class="nav-link"><h6>Catlog</h6></a>
+                            <div class="dropdown-menu card card-body w-100" id="catlog">
+                                <div class="border-top border-bottom mb-2">
+                                    <div class="container mt-2 mb-2">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <nav class="nav nav-tabs">
+                                                    <a class="nav-link text-uppercase active" data-bs-toggle="tab" href="#navtap">
+                                                        Women
+                                                    </a>
+                                                    <a class="nav-link text-uppercase" data-bs-toggle="tab" href="#navtap">
+                                                        Men
+                                                    </a>
+                                                    <a class="nav-link text-uppercase" data-bs-toggle="tab" href="#navtap">
+                                                        Kids
+                                                    </a>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="navtap">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-2 py-3">
+                                                    <!-- Heading -->
+                                                    <div class="mb-3 fw-bold">Clothing</div>
+                                                    <!-- Links -->
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Clothing</a></li>
+                                                        <li><a href="./searchpage.html">Blouses & Shirts</a></li>
+                                                        <li><a  href="./searchpage.html">Coats & Jackets</a></li>
+                                                        <li><a  href="./searchpage.html">Dresses</a></li>
+                                                        <li><a  href="./searchpage.html">Hoodies & Sweats</a></li>
+                                                        <li><a  href="./searchpage.html">Denim</a></li>
+                                                        <li><a  href="./searchpage.html">Jeans</a></li>
+                                                        <li><a  href="./searchpage.html">Jumpers & Cardigans</a></li>
+                                                        <li><a  href="./searchpage.html">Leggings</a></li>
+                                                    </ul>
+                                                </div>        
+                                                <div class="col-2 py-3" >
+                                                    <div class="mb-3 fw-bold">Shoes & Boots</div>
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Shoes & Boots</a></li>
+                                                        <li><a href="./searchpage.html">Branded Shoes</a></li>
+                                                        <li><a href="./searchpage.html">Boots</a></li>
+                                                        <li><a href="./searchpage.html">Heels</a></li>
+                                                        <li><a href="./searchpage.html">Trainers</a></li>
+                                                        <li><a href="./searchpage.html">Sandals</a></li>
+                                                        <li><a href="./searchpage.html">Shoes</a></li>
+                                                        <li><a href="./searchpage.html">Wide Fit Shoes</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-2 py-3">
+                                                    <div class="mb-3 fw-bold">Bags & Accessories</div>
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Bags & Accessories</a></li>
+                                                        <li><a href="./searchpage.html">Accessories</a></li>
+                                                        <li><a href="./searchpage.html">Bags & Purses</a></li>
+                                                        <li><a href="./searchpage.html">Luggage</a></li>
+                                                        <li><a href="./searchpage.html">Belts</a></li>
+                                                        <li><a href="./searchpage.html">Hats</a></li>
+                                                        <li><a href="./searchpage.html">Hair Accessories</a></li>
+                                                        <li><a href="./searchpage.html">Jewellery</a></li>
+                                                        <li><a href="./searchpage.html">Travel Accessories</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-2 py-3">
+                                                    <div class="mb-3 fw-bold">Collections</div>
+                                                    <ul class="list-unstyled fs-lg">
+                                                        <li><a href="./searchpage.html">All Collections</a></li>
+                                                        <li><a href="./searchpage.html">Occasionwear</a></li>
+                                                        <li><a href="./searchpage.html">Going Out</a></li>
+                                                        <li><a href="./searchpage.html">Workwear</a></li>
+                                                        <li><a href="./searchpage.html">Holiday Shop</a></li>
+                                                        <li><a href="./searchpage.html">Jean Fit Guide</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-4 card align-items-center justify-content-center" id="op"  onmouseover="addside(4)" onmouseout="lessside(4)" style="position: relative; background-size: cover; background-image: url('./public/images/product-110.jpg');">
+                                                    <div class="card-body" style="position: absolute;"><a class="btn btn-light btn-lg" href="./searchpage.html" style="color: black;">Shop Sweaters<span id="ra" class="bi bi-arrow-right-short" ></a></button></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item"><a class="nav-link"><h6>shop</h6></a></li>
+                        <li class="nav-item" onmouseover="displaydropdown(3)" onmouseout="displaynonedown(3)"><a class="nav-link"><h6>Pages</h6></a>
+                            <ul class="dropdown-menu card card-body" id="pages">
+                                <li class="dropdown-item-text"><a>About</a></li>
+                                <li class="dropdown-item-text"><a>Contact Us</a></li>
+                                <li class="dropdown-item-text"><a>Store Locator</a></li>
+                                <li class="dropdown-item-text"><a>FAQ</a></li>
+                                <li class="dropdown-item-text"><a>Coming Soon</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item" onmouseover="displaydropdown(4)" onmouseout="displaynonedown(4)"><a class="nav-link"><h6>Blog</h6></a>
+                            <div class="dropdown-menu card-body" id="blog">
+                                <ul class="list-unstyled dropdown-item">
+                                    <li class="dropdown-item-text"><a>Blog</a></li>
+                                    <li class="dropdown-item-text"><a>Blog Post</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="navbar-nav navbar-collapse collapse mb-2" id="home">
+                        <div class="container">
+                            <a class="bi bi-search" style="color: black;" id="raj" onclick="disapper(0)"></a>
+                            <form autocomplete="off" id="searchbar">
+                                <div>            
+                                    <input type="text" id="input">
+                                    <span class="bi bi-search" onclick="disapper(1)"></span>
+                                </div>
+                            </form>
+                        </div>
+                        <a href="#wishlist" data-bs-toggle="offcanvas" onclick="clicktowishing()"><span class="bi bi-heart me-3"></span></a>
+                        <a href="#cart" onclick="cartclick()" data-bs-toggle="modal"><span class="bi bi-cart position-relative me-3"><span class="badge rounded rounded-circle bg-danger" style="position: absolute; top: -10px; left: 5px;" id="cartid"></span></span></a>
+                        <a data-bs-target="#login" data-bs-toggle="modal"><span class="border rounded-2 border-1 bg-warning p-2 me-3" id="lgsg">login/signin</span></a><!--this is inter document link where it actually goes to another page from this page to login page-->
+                    </div>
+                </div>
+            </div>
+            <button class="navbar-toggler" data-bs-target="#home" data-bs-toggle="collapse">
+                <span class="navbar-toggler-icon"></span>
+            </button> 
+        </div>
+    </header>
+    <div class="py-4">
+        <h2 class="text-center">Checkout</h2>
+        <h6 class="text-center">Already have an account? <a href="#login" data-bs-toggle="modal">Click here to login</a></h6>
+    </div>
+    <div class="container d-flex">
+        <div class="col-7 m-3 px-5">
+            <h5>Billing Details</h5>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <div class="m-1"><label for="firstname">First Name *</label></div>
+                    <div><input type="text" name="" id="firstname" placeholder="First Name" style="padding: 10px;" class=" m-1 w-100"></div>
+                </div>
+                <div>
+                    <div class="m-1"><label for="lastname">Last Name *</label></div>
+                    <div><input type="text" name="" id="lastname" placeholder="Last Name" style="padding: 10px;" class=" m-1 w-100"></div>
+                </div>
+            </div>
+            <div>
+                <div class="m-1"><label for="email">Email *</label></div>
+                <div><input type="email" name="" id="email" placeholder="Email" style="padding: 10px;" class=" m-1 w-100"></div>
+            </div>
+            <div>
+                <div class="m-1"><label for="companyname">Company name *</label></div>
+                <div><input type="text" name="" id="companyname" placeholder="Company name (optional)" style="padding: 10px;" class=" m-1 w-100"></div>
+            </div>
+            <div>
+                <div class="m-1"><label for="Country">Country *</label></div>
+                <div><input type="text" name="" id="Country" placeholder="Country *" style="padding: 10px;" class=" m-1 w-100"></div>
+            </div>
+            <div>
+                <div class="m-1"><label for="addressline">Address Line 1 *</label></div>
+                <div><input type="text" name="" id="addressline" placeholder="Address Line 1" style="padding: 10px;" class=" m-1 w-100"></div>
+            </div>
+            <div>
+                <div class="m-1"><label for="addressline2">Address Line 2 *</label></div>
+                <div><input type="text" name="" id="addressline2" placeholder="Address Line 2 (optional)" style="padding: 10px;" class="m-1 w-100"></div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <div class="m-1"><label for="towncity">Town / City *</label></div>
+                    <div><input type="text" name="" id="towncity" placeholder="Town / City" style="padding: 10px;" class=" m-1 w-100"></div>
+                </div>
+                <div>
+                    <div class="m-1"><label for="zipostcode">ZIP / Postcode *</label></div>
+                    <div><input type="text" name="" id="zipostcode" placeholder="ZIP / Postcode" style="padding: 10px;" class="m-1 w-100"></div>
+                </div>
+            </div>
+            <div>
+                <div class="m-1"><label for="Mobile">Mobile Phone *</label></div>
+                <div><input type="number" name="" id="Mobile" placeholder="Mobile Phone" style="padding: 10px;" class=" m-1 w-100"></div>
+            </div>
+            <div class="my-3">
+                <h5>Shipping Details</h5>
+            </div>
+            <table class="table table-hover table-bordered">
+                <tbody class="text-muted">
+                    <tr>
+                        <td><input type="radio" name="ship" id="" class="m-2 active" value="8" onclick="pricedisplay1(8)">Standard Shipping</td>
+                        <td>Delivery in 5 - 7 working days</td>
+                        <td>$8.00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="radio" name="ship" id="" class="m-2" value="12" onclick="pricedisplay1(12)">Express Shipping</td>
+                        <td>Delivery in 3 - 5 working days</td>
+                        <td>$12.00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="radio" name="ship" id="" class="m-2" value="12" onclick="pricedisplay1(18)">1 - 2 day Shipping</td>
+                        <td>Delivery in 1 - 2 working days</td>
+                        <td>$18.00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="radio" name="ship" id="" class="m-2" value="8" onclick="pricedisplay1(0)">Free Shipping</td>
+                        <td>Living won't the He one every subdue meat replenish face was you morning firmament darkness.</td>
+                        <td>$0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex">
+                <input type="checkbox">
+                <a class="text-muted m-1" href="#differentadd" data-bs-toggle="collapse">Ship to a different address?</a>
+            </div>
+            <div class="collapse " id="differentadd">
+                <div>
+                    <div class="m-1"><label for="firstname">Country *</label></div>
+                    <div><input type="text" name="" id="firstname" placeholder="Country *" style="padding: 10px;" class=" m-1 w-100"></div>
+                </div>
+                <div>
+                    <div class="m-1"><label for="firstname">Address Line 1 *</label></div>
+                    <div><input type="text" name="" id="firstname" placeholder="Address Line 1" style="padding: 10px;" class=" m-1 w-100"></div>
+                </div>
+                <div>
+                    <div class="m-1"><label for="firstname">Address Line 2 *</label></div>
+                    <div><input type="text" name="" id="firstname" placeholder="Address Line 2 (optional)" style="padding: 10px;" class="m-1 w-100"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="m-1"><label for="firstname">Town / City *</label></div>
+                        <div><input type="text" name="" id="firstname" placeholder="Town / City" style="padding: 10px;" class="m-1 w-100"></div>
+                    </div>
+                    <div>
+                        <div class="m-1"><label for="firstname">ZIP / Postcode *</label></div>
+                        <div><input type="text" name="" id="firstname" placeholder="ZIP / Postcode" style="padding: 10px;" class="m-1 w-100"></div>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-outline-dark m-1">Save Address</button>
+                </div>
+            </div>
+            <div>
+                <h5>Payment</h5>
+                <div>
+                    <table class="table table-hover table-bordered">
+                        <tbody class="text-muted">
+                            <tr>
+                                <td>
+                                    <input type="radio" name="cardopt" id="creditcard" class="m-2">
+                                    <label for="creditcard">Credit Card</label>
+                                    <img src="./public/images/cards.svg" alt="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="radio" name="cardopt" id="" class="m-2">
+                                    <img src="./public/images/paypal.svg" alt="">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <textarea rows="5" cols="95">
+
+                    </textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 m-3 p-2">
+            <h5 class="pb-3">Order Items<strong id="ordercount"></strong></h5>
+            <div id="orderdisplay1" style="max-height: 500px; overflow: auto;"></div>
+            <div class="card my-3 bg-light">
+                <div class="card-body" id="pricedisplay1">
+                </div>
+            </div>
+            <div class="p-2">
+                <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
+            </div>
+            <a class="btn btn-dark w-100 p-3">Place Order</a>
+        </div>
+    </div>
+    <div class="modal fade" id="cart">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-primary">Your cart items<span class="bi bi-cart-check-fill"></span></h2>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Head</th>
+                                <th>Preview</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbb">
+                            
+                        </tbody>
+                    </table>
+                    <div class="p-3 bg-light d-flex justify-content-between">
+                        <h5>Subtotal</h5>
+                        <strong id="std"></strong>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-dark" onclick="ctoc()">Contiune to Checkout</button>
+                    <button class="btn btn-outline-dark">View Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="login">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 ><span class="bi bi-person"></span>User Login</h2>
+                    <button data-bs-dismiss="modal" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        <dt class="form-text">User Name</dt>
+                        <dd><input type="text" class="form-control"></dd>
+                        <dt class="form-text">Password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dd style="text-align: center;"><a class="link-dark" href="#signin" data-bs-toggle="modal">
+                                New to Buy it ? Register here
+                        </a></dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" >Login</button>
+                    <button data-bs-dismiss="modal" class="btn btn-danger">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="signin">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="bi bi-person"></span>User Register</h2>
+                    <button data-bs-dismiss="modal" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        <dt class="form-text">Email Id</dt>
+                        <dd><input type="email" class="form-control"></dd>
+                        <dt class="form-text">Password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dt class="form-text">Confirm password</dt>
+                        <dd><input type="password" class="form-control"></dd>
+                        <dt class="form-text">Phone Number</dt>
+                        <dd><input type="text" class="form-control"></dd>
+                        <dt class="form-text">Gender</dt>
+                        <dd>
+                            <input type="radio" class="form-check-input" id="male" name="gender">
+                            <label for="male" class="form-check-label">Male</label>
+                            <input type="radio" class="form-check-input" id="female" name="gender">
+                            <label for="female" class="form-check-label">Female</label>
+                            <input type="radio" class="form-check-input" id="others" name="gender">
+                            <label for="others" class="form-check-label">Others</label>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Register</button>
+                    <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="wishlist">
+        <div class="offcanvas-header border-bottom">
+            <h2 class="offcanvas-title">Wishlist</h2>
+            <button class="btn btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body m-2" >
+            <div id="wishinglistoffcanves">
+
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-around border-bottom py-5 bg-light">
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-truck text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">FREE SHOPPING</span>
+            </div>
+            <div class="ms-4" style="color: grey;">From all orders over $100</div>
+        </div>
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-arrow-left-right text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">FREE RETURNS</span>
+            </div>
+            <div class="ms-4" style="color: grey;">Return money within 30 days</div>
+        </div>
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-lock text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">SECURE SHOPPING</span>
+            </div>
+            <div class="ms-4" style="color: grey;">You're in safe hands</div>
+        </div>
+        <div>
+            <div class="d-sm-flex">
+                <span class="bi bi-tag text-danger"></span>
+                <span class="ms-2 fw-bold" style="font-size: smaller;">OVER 10,000 STYLES</span>
+            </div>
+            <div class="ms-4" style="color: grey;">We have everything you need</div>
+        </div>
+    </div>
+    <footer class="container-fluid bg-black" style="color: white; position: relative; width: auto;">
+        <div style="padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div class="m-4 fs-4">Want style Ideas and Treats?</div>
+            <div class="m-2 fs-5 d-flex">
+                <input class="text-bg-dark p-2 me-2" style="border-style: none; width: auto;" type="email" placeholder="Enter Email*">
+                <button class="text-white p-2" style="background-color: grey; border-style: none;">Subscribe</button>
+            </div>
+            <div class="d-flex flex-wrap m-5" style="color: grey; width: auto;">
+                <div>
+                    <h2 style="color: white;">Shopper.</h2>
+                    <div>
+                        <span class="bi bi-facebook"></span>
+                        <span class="bi bi-youtube"></span>
+                        <span class="bi bi-twitter"></span>
+                        <span class="bi bi-instagram"></span>
+                        <span class="bi bi-medium"></span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="ms-5" >
+                        <h6 style="color: white;">SUPPORT</h6>
+                        <div>Contact Us</div>
+                        <div>FAQs</div>
+                        <div>Size Guide</div>
+                        <div>Shipping &amp; Returns</div>
+                    </div>
+                    <div class="ms-5">
+                        <h6 style="color: white;">SHOP</h6>
+                        <div>Men's Shopping</div>
+                        <div>Women's Shopping</div>
+                        <div>Kids' Shopping</div>
+                        <div>Discounts</div>
+                    </div>
+                    <div class="ms-5">
+                        <h6 style="color: white;">COMPANY</h6>
+                        <div>Our Story</div>
+                        <div>Careers</div>
+                        <div>Terms &amp; Conditions</div>
+                        <div>Privacy &amp; Cookie policy</div>
+                    </div>
+                </div>
+                <div class="ms-5">
+                    <h6 style="color: white;">CONTACT</h6>
+                    <address>
+                        <div>1-202-555-0105</div>
+                        <div>1-202-555-0106</div>
+                        <div>help@shopper.com</div>
+                    </address>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap justify-content-between border-top">
+            <h6 style="color: grey;" class="m-2">© 2019 All rights reserved. Designed by Unvab.</h6>
+            <div class="m-2">
+                <img src="./public/images/Screenshot 2023-04-07 130144.jpg">
+            </div>
+        </div>
+    </footer>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+</html>
