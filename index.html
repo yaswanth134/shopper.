@@ -18,15 +18,17 @@
             position: absolute;
             z-index: 99;
         }
+        a{
+            cursor: pointer;
+        }
         iframe{
             border: none;
             height: 600px;
             width: 600px;
-        }
+        }   
         a{
             text-decoration: none;
             color: black;
-             cursor: pointer;
         }
         li{
             padding: 5px;
@@ -92,23 +94,8 @@
             background-color: tomato;
         }
     </style>
+    <script src="main.js"></script>
     <script>
-        /*    function csa1(){
-                document.getElementById('pa').innerHTML="";
-                list1.map(function(product){
-                    let div=document.createElement("div");
-                    div.innerHTML=`
-                    <div class="me-5 ms-4 mb-3">
-                        <img src="${product.image}" class="card-img-top" height:"140px">
-                        <div style="color:grey">${product.name}</div>
-                        <div style="color:black"><b>${product.desc}</b></div>
-                        <div style="color:grey"><b>${product.price}</b></div>
-                    </div>
-                    `;
-                    document.getElementById('pa').appendChild(div);
-                })
-            }
-        */
         function gettime1(){
             let now =new Date();
             var start = new Date(now.getFullYear(),0,1);
@@ -119,9 +106,6 @@
             document.getElementById("time").innerHTML=24-now.getHours();
             document.getElementById("minu").innerHTML=60-now.getMinutes();
             document.getElementById("seco").innerHTML=60-now.getSeconds();
-        }
-        function fastsize(value){
-            document.getElementById("size").innerHTML=value;
         }
         function Preview(v){
             document.getElementById('Previewitems').innerHTML="";
@@ -251,144 +235,10 @@
             }
             document.getElementById('Previewitems').appendChild(div);
         }
-        /*function LoadCategories(){
-            fetch('https://fakestoreapi.com/products/categories')
-            .then(function(res){
-                return res.json();
-            })
-            .then(function(categories){
-                categories.unshift('all');
-                categories.map(function(category){
-                    var option =document.createElement('option');
-                    option.text=category.toUpperCase();
-                    option.value=category;
-                    document.getElementById('1stcategory').appendChild(option);
-                })
-            })
-        }
-        function loadproducts(url){
-            document.querySelector("main").innerHTML="";
-            fetch(url)
-            .then(function(res){
-               return res.json();
-            })
-            .then(function(products){
-                products.map(function(product){
-                    let div= document.createElement("div");
-                    div.className="card m-2 p-2";
-                    div.style.width="200px";
-                    div.innerHTML=`
-                    <img src=${product.image} class="card-img-top" height="140px">
-                    <div class="card-header overflow-auto" style="height:100px">
-                        <p>${product.title}</p>
-                    </div>
-                    <div class="card-body">
-                        <dl>
-                            <dt>Price</dt>
-                            <dd>${product.price}</dd>
-                            <dt>Rating</dt>
-                            <dd>${product.rating.rate}<span class="bi bi-star-fill text-gold"></span>[${product.rating.count}]</dd>
-                        </dl>
-                    </div>
-                    <div class="card-footer">
-                        <button onclick="AddClick(${product.id})" class="btn btn-danger w-100">
-                            <span class="bi bi-cart4"></span>Add to Card
-                        </button>
-                    </div>
-                    `;
-                    document.querySelector('main').appendChild(div);
-                })
-            })
-        }*/
-        var list1=[
-            {"image":"../public/images/Leather%20mid-heel%20Sandals.jpg","color":"Brown","image2":"./public/images/Leather mid-heel Sandals1.jpg","desc":"Shoes","title":"Leather mid-heel Sandals","price":"$129.00"},
-            {"desc":"Dresses","title":"Cotton floral print Dress","color":"Pink","image2":"./public/images/product-6.jpg","price":"$40.00","image":"./public/images/dress.jpg",},
-            {"desc":"Shoes","image":"./public/images/shoes.jpg","color":"Blue","image2":"./public/images/product-122.jpg","title":"Leather Sneakers","price":"$85.00"},
-            {"desc":"Tops","image":"../public/images/tops.jpg","color":"White","image2":"./public/images/tops2.jpg","title":"Cropped cotton Top","price":"$29.00"},
-            {"image":"../public/images/dresses.jpg","color":"Yellow","image2":"./public/images/dresses2.jpg","desc":"Dresses","title":"Floral print midi Dress","price":"$50.00"},
-            {"image":"../public/images/bags.jpg","color":"Brown","image2":"./public/images/product-123.jpg","desc":"Bags","title":"Suede cross body Bag","price":"$49.00"},
-            {"image":"../public/images/skirts.jpg","color":"White-Black","image2":"./public/images/product-124.jpg","desc":"Skirts","title":"Printed A-line Skirt","price":"$79.00"},
-            {"image":"../public/images/shoes2.jpg","color":"Brown","image2":"./public/images/shoes2-1.jpg","desc":"Shoes","title":"Heel strappy Sandals","price":"$90.00"}
-        ];
-        function displaynonedown(x){
-            switch(x){
-                case 1:
-                    document.getElementById('ds').style='display:none;';
-                    break;
-                case 2:
-                     document.getElementById('catlog').style='display:none';
-                     break;
-                case 3:
-                    document.getElementById('pages').style='display:none';
-                    break;
-                case 4:
-                    document.getElementById('blog').style='display:none';
-                    break;
-                default:
-                    document.getElementById('ds').style='display:none;';
-                    document.getElementById('catlog').style='display:none';
-                    document.getElementById('pages').style='display:none';
-                    document.getElementById('blog').style='display:none';
-            }
-        }
-        function displaydropdown(y){
-            switch(y){
-                case 1:
-                     document.getElementById('ds').style='display:block; position:absolute; top:60px;';
-                     break;
-                case 2:
-                    document.getElementById('catlog').style='position:absolute; top:60px; left:0px; display:block;'; 
-                    break;
-                case 3:
-                    document.getElementById('pages').style='display:block; position:absolute; top:60px;'; 
-                    break;
-                case 4:
-                    document.getElementById('blog').style='display:block; position:absolute; top:60px;';
-                    break;
-            }
-        }
-        function addside(cp){
-            if(cp===1)
-            {
-                document.getElementById('coverwomen').style="margin-left:4px;";
-            }
-            else if(cp===2){
-                document.getElementById('covermen').style="margin-left:4px;";
-            }
-            else if(cp===3){
-                document.getElementById('coverkids').style="margin-left:4px;";
-            }
-            else {
-                document.getElementById('ra').style="margin-left:4px;";
-            }
-        }
-        function lessside(cp){
-            if(cp===1){
-                document.getElementById('coverwomen').style="margin-left:-4px;";
-            }
-            else if(cp===2){
-                document.getElementById('covermen').style="margin-left:-4px;";
-            }
-            else if(cp===3){
-                document.getElementById('coverkids').style="margin-left:-4px;";
-            }
-            else{
-                 document.getElementById('ra').style='margin-left:-4px;';
-            }
-        }
+        
         function timeki(){
             setInterval(gettime1,1000);
         }
-        /*function Categorychanged(){
-            var categoryname=document.getElementById('1stcategory').value;
-            if(categoryname=="all"){
-                loadproducts('http://fakestoreapi.com/products');
-            }
-            else{
-                loadproducts(`http://fakestoreapi.com/products/category/${categoryname}`);
-            }
-        }
-        */
         var cartitems=[];//inside values of cart which added by user
         function getcartcount(i){
             if(i===0){
@@ -419,9 +269,10 @@
                 })
             }
         }
+        let s=[];
         function popclick(js){
-            console.log(js);
             cartitems.splice(js,1);
+            s.pop(js);
             cartclick();
             getcartcount(1);
         }
@@ -429,6 +280,8 @@
             for(let i=0;i<list1.length;i++){
                 if(index===i){
                     cartitems.push(list1[i]);
+                    s.push(i);
+                    console.log(s);
                     cartclick();
                     getcartcount(1);
                 }
@@ -436,6 +289,49 @@
                     continue;
                 }
             }
+        }
+        function cartclick(){
+            let pr=0.00;
+            if(cartitems.length!==0){
+                document.querySelector('tbody').innerHTML="";
+                cartitems.map(function(product){
+                    var tr=document.createElement('tr');
+                    var tdTitle=document.createElement('td');
+                    var tdpreview=document.createElement('td');
+                    var tdprice=document.createElement('td');
+                    var tdcross=document.createElement('td');
+                    tdTitle.innerHTML=product.title;
+                    tdpreview.innerHTML=`<img src=${product.image} width="50px" height="50px">`;
+                    tdprice.innerHTML=product.price;
+                    tdcross.innerHTML=`<button class="btn-close" onclick="popclick(${cartitems.indexOf(product)})"></button>`;
+                    pr=pr+product.price;
+                    tr.appendChild(tdTitle);
+                    tr.appendChild(tdpreview);
+                    tr.appendChild(tdprice);
+                    tr.appendChild(tdcross);
+                    document.querySelector('tbody').appendChild(tr);
+                })
+                document.getElementById("std").innerHTML=pr;
+            }
+            else{
+                let pr=0;
+                document.getElementById("std").innerHTML=pr+".00";
+                document.querySelector("tbody").innerHTML=`<tr>
+                        <td>nothing added to cart</td>
+                    </tr>`;
+            }
+        }
+        function ctoc(){
+            if(s.length===0){
+                localStorage.setItem("msg","nothing");
+                localStorage.setItem("list1cart",s);
+                window.location.href="./checkoutpage.html";
+            } 
+            else{
+                localStorage.setItem("msg","products");
+                localStorage.setItem("list1cart",s);
+                window.location.href="./checkoutpage.html";
+            }  
         }
         const wishlist=new Set();
         function clicktowish(index){
@@ -478,7 +374,7 @@
                     <div class="m-2"> 
                         <h5>${product.title}</h5>
                         <h4>${product.desc}</h4>
-                        <h6 class="text-muted">${product.price}</h6>
+                        <h6 class="text-muted">&dollar;${product.price}</h6>
                         <span class="btn btn-outline-dark bi bi-trash mt-1" onclick="popwishlist('${product.title}')"></span>
                         <button class="btn btn-outline-dark" onclick="movetocart('${product.title}')">Move To Cart</button>
                     </div>
@@ -487,101 +383,21 @@
 
             })
         }
-        function autocomplete(input, list) {
-            //Add an event listener to compare the input value with all countries
-            input.addEventListener('input', function () {
-                //Close the existing list if it is open
-                closeList();
-
-                //If the input is empty, exit the function
-                if (!this.value){
-                    return;
-                }
-                //Create a suggestions <div> and add it to the element containing the input field
-                suggestions = document.createElement('div');
-                suggestions.setAttribute('id', 'suggestions');
-                this.parentNode.appendChild(suggestions);
-                
-                //Iterate through all entries in the list and find matches
-                for (let i=0; i<list.length; i++) {
-                    if (list[i].desc.toUpperCase().includes(this.value.toUpperCase())) {
-                        //If a match is foundm create a suggestion <div> and add it to the suggestions <div>
-                        suggestion = document.createElement('ul');
-                        suggestion.style="list-style: none; margin: 0px 0px 2px -25px";
-                        suggestion.innerHTML = `
-                            <li>
-                                <a onclick="sdc(${i})">${list[i].title}</a>
-                                <img src="${list[i].image}" width="30px" height="30px">
-                            </li>
-                        `;
-                        suggestions.appendChild(suggestion);
-                    }
-                }
-
-            });
-            function closeList() {
-                let suggestions = document.getElementById('suggestions');
-                if (suggestions)
-                    suggestions.parentNode.removeChild(suggestions);
-            }
-        }
-        function sdc(s){
-            localStorage.setItem("item",s);
-            window.location.href='./cartpage.html';
-            // document.getElementById(a.id).addEventListener("click",function(event){ 
-            //     window.location.href="./cartpage.html";
-            // })
-        }
-        function cartclick(){
-            if(cartitems.length!==0){
-                document.querySelector('tbody').innerHTML="";
-                cartitems.map(function(product){
-                    var tr=document.createElement('tr');
-                    var tdTitle=document.createElement('td');
-                    var tdpreview=document.createElement('td');
-                    var tdprice=document.createElement('td');
-                    var tdcross=document.createElement('td');
-                    tdTitle.innerHTML=product.title;
-                    tdpreview.innerHTML=`<img src=${product.image} width="50px" height="50px">`;
-                    tdprice.innerHTML=product.price;
-                    tdcross.innerHTML=`<button class="btn-close" onclick="popclick(${cartitems.indexOf(product)})"></button>`;
-                    tr.appendChild(tdTitle);
-                    tr.appendChild(tdpreview);
-                    tr.appendChild(tdprice);
-                    tr.appendChild(tdcross);
-                    document.querySelector('tbody').appendChild(tr);
-                })
-            }
-            else{
-                document.querySelector("tbody").innerHTML=`<tr>
-                        <td>nothing added to cart</td>
-                    </tr>`;
-            }
-        }
         function bodyload(){
             //LoadCategories();
             //loadproducts("https://fakestoreapi.com/products");
             displaynonedown(0);
             getcartcount(0);
             //csa1();
-            timeki();    
+            timeki(); 
             autocomplete(document.getElementById('input'), list1);
         }
-        function disapper(m){
-            if(m===0){
-                document.getElementById("searchbar").style="display:block;";
-                document.getElementById("raj").style="display:none;";
-            }
-            else{
-                document.getElementById("searchbar").style="display:none;";
-                document.getElementById("raj").style="display:block;";
-            }
-        }
+        
     </script>
 </head>
 <body onload="bodyload()" class="container-fluid ">
     <header>
-        <div class="navbar navbar-expand-lg text-dark bg-white">
+        <div class="navbar navbar-expand-lg text-dark bg-white" >
             <div class="container-fluid">
                 <div class="navbar-brand"><h2>Shopper.</h2></div>
                 <div class="naba">
@@ -675,8 +491,8 @@
                                                         <li><a href="./searchpage.html">Jean Fit Guide</a></li>
                                                     </ul>
                                                 </div>
-                                                <div class="col-4 card align-items-center justify-content-center" id="op" onmouseover="addside(4)" onmouseout="lessside(4)" style="position: relative; background-size: cover; background-image: url('./public/images/product-110.jpg');">
-                                                    <div class="card-body" style="position: absolute;"><a class="btn btn-light btn-lg" href="./searchpage.html" style="color: black;">Shop Sweaters <span id="ra" class="bi bi-arrow-right-short"></span></a></div>
+                                                <div class="col-4 card align-items-center justify-content-center" id="op"  onmouseover="addside(4)" onmouseout="lessside(4)" style="position: relative; background-size: cover; background-image: url('./public/images/product-110.jpg');">
+                                                    <div class="card-body" style="position: absolute;"><a class="btn btn-light btn-lg" href="./searchpage.html" style="color: black;">Shop Sweaters<span id="ra" class="bi bi-arrow-right-short" ></a></button></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -720,10 +536,10 @@
                         <a data-bs-target="#login" data-bs-toggle="modal"><span class="border rounded-2 border-1 bg-warning p-2 me-3" id="lgsg">login/signin</span></a><!--this is inter document link where it actually goes to another page from this page to login page-->
                     </div>
                 </div>
-            </div>
-            <button class="navbar-toggler" data-bs-target="#home" data-bs-toggle="collapse">
-                <span class="navbar-toggler-icon"></span>
-            </button> 
+                <button class="navbar-toggler" data-bs-target="#home" data-bs-toggle="collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div> 
         </div>
     </header>
     <div class="d-flex justify-content-center bg-black p-1" style="color: gold;">
@@ -776,6 +592,14 @@
                             
                         </tbody>
                     </table>
+                    <div class="p-3 bg-light d-flex justify-content-between">
+                        <h5>Subtotal</h5>
+                        <strong id="std"></strong>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-dark" onclick="ctoc()">Contiune to Checkout</button>
+                    <button class="btn btn-outline-dark">View Cart</button>
                 </div>
             </div>
         </div>
@@ -843,22 +667,22 @@
     <div class="container-fluid">
         <a href="./searchpage.html">
             <div class="row py-4" style="height: 500px;">
-                <div class="col-4" style="background-image: url(./public/images/women.jpg); background-size: cover;" name="cover1" onmouseover="addside(1)" onmouseout="lessside(1)" >
+                <div class="col-4" style="background-image: url(./public/images/women.jpg); background-size: cover;" name="cover1" onmouseover="addside(1)" onmouseout="lessside(1)" id="pictures">
                     <div class="d-flex justify-content-center align-items-center" style="height: 400px;"><h1 class="text-white">Women</h1></div>
                     <div class="d-flex justify-content-center" style="margin: 10px;"><button class="btn btn-light btn-lg">Shop women <span id="coverwomen" class="bi bi-arrow-right-short"></span></button></div>
                 </div>
-                <div class="col-4" style="background-image: url(./public/images/menshop.jpg); background-size: cover;" name="cover1" onmouseover="addside(2)" onmouseout="lessside(2)">
+                <div class="col-4" style="background-image: url(./public/images/menshop.jpg); background-size: cover;" name="cover1" onmouseover="addside(2)" onmouseout="lessside(2)" id="pictures1">
                     <div class="d-flex justify-content-center align-items-center" style="height: 400px;"><h1 class="text-white">Men</h1></div>
                     <div class="d-flex justify-content-center" style="margin: 10px;"><button class="btn btn-light btn-lg">Shop Men <span id="covermen" class="bi bi-arrow-right-short"></span></button></div>
                 </div>
-                <div class="col-4" style="background-image: url(./public/images/upwk61775055-wikimedia-image.jpg); background-size: cover;" name="cover1" onmouseover="addside(3)" onmouseout="lessside(3)">
+                <div class="col-4" style="background-image: url(./public/images/upwk61775055-wikimedia-image.jpg); background-size: cover;" name="cover1" onmouseover="addside(3)" onmouseout="lessside(3)" id="pictures2">
                     <div class="d-flex justify-content-center align-items-center" style="height: 400px;"><h1 class="text-white">Kids</h1></div>
                     <div class="d-flex justify-content-center" style="margin: 10px;"><button class="btn btn-light btn-lg">Shop Kids <span  id="coverkids" class="bi bi-arrow-right-short"></span></button></div>
                 </div>
             </div>
         </a>
     </div>
-    <div class="d-flex justify-content-around border-bottom" style="margin: 20px 200px 0px 200px;">
+    <div class="d-flex flex-wrap justify-content-around border-bottom" style="margin: 20px 200px 0px 200px;">
         <div class="mb-3">
             <div class="d-sm-flex">
                 <span class="bi bi-truck text-danger"></span>
