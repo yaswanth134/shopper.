@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
     <style>
+        #suggestions{
+            background-color: whitesmoke;
+            position: absolute;
+            z-index: 99;
+        }
+        #searchbar{
+            display: none;
+        }
         a{
             text-decoration: none;
             color: black;
@@ -39,6 +47,7 @@
             opacity: 0.8;
         }
     </style>
+    <script src="main.js"></script>
     <script>
         function LoadCategories(){
             fetch('https://fakestoreapi.com/products/categories')
@@ -62,83 +71,38 @@
                return res.json();
             })
             .then(function(products){
-                products.map(function(product){
+               products.forEach(element => {
                     let div= document.createElement("div");
                     div.className="card m-2 p-2";
                     div.style.width="200px";
                     div.innerHTML=`
-                    <img src=${product.image} class="card-img-top" height="140px">
+                    <img src=${element.image} class="card-img-top" height="140px">
                     <div class="card-header overflow-auto" style="height:100px">
-                        <p>${product.title}</p>
+                        <p>${element.title}</p>
                     </div>
                     <div class="card-body">
                         <dl>
                             <dt>Price</dt>
-                            <dd>${product.price}<span class="bi-currency-dollar"></span></dd>
+                            <dd>${element.price}<span class="bi-currency-dollar"></span></dd>
                             <dt>Rating</dt>
-                            <dd>${product.rating.rate}<span class="bi-star-fill ms-1" id="star"></span>[${product.rating.count}]</dd>
+                            <dd class="d-flex">
+                                ${element.rating.rate}
+                                <span class="bi bi-star-fill"></span>
+                                ${element.rating.count}
+                            </dd>
                         </dl>
                     </div>
                     <div class="card-footer">
-                        <button onclick="AddClick(${product.id})" class="btn btn-danger w-100">
+                        <button onclick="AddClick(${element.id})" class="btn btn-danger w-100">
                             <span class="bi bi-cart4"></span>Add to Card
                         </button>
                     </div>
                     `;
                     document.querySelector('main').appendChild(div);
-                })
+               });
             })
         }
-        function loadstar(url){
-            document.getElementById("star").innerHTML="";
-            let span=document.createElement('span');
-            fetch(url)
-            .then(function(res){
-               return res.json();
-            })
-            .then(function(products){
-                products.map(function(product){
-                    console.log(product.price);
-                })
-            })
-        }
-        function displaynonedown(x){
-            switch(x){
-                case 1:
-                    document.getElementById('ds').style='display:none;';
-                    break;
-                case 2:
-                     document.getElementById('catlog').style='display:none';
-                     break;
-                case 3:
-                    document.getElementById('pages').style='display:none';
-                    break;
-                case 4:
-                    document.getElementById('blog').style='display:none';
-                    break;
-                default:
-                    document.getElementById('ds').style='display:none;';
-                    document.getElementById('catlog').style='display:none';
-                    document.getElementById('pages').style='display:none';
-                    document.getElementById('blog').style='display:none';
-            }
-        }
-        function displaydropdown(y){
-            switch(y){
-                case 1:
-                     document.getElementById('ds').style='display:block; position:absolute; top:60px;';
-                     break;
-                case 2:
-                    document.getElementById('catlog').style='position:absolute; top:60px; left:0px; display:block;'; 
-                    break;
-                case 3:
-                    document.getElementById('pages').style='display:block; position:absolute; top:60px;'; 
-                    break;
-                case 4:
-                    document.getElementById('blog').style='display:block; position:absolute; top:60px;';
-                    break;
-            }
-        }
+        
         function addside(){
             document.getElementById('ra').style="margin-left:4px;";
         }
@@ -150,6 +114,7 @@
             LoadCategories();
             loadproducts("https://fakestoreapi.com/products");
             getcartcount();
+            autocomplete(document.getElementById('input'), list1);
             //console.log("hello mowa");
         }
         function Categorychanged(){
@@ -161,16 +126,76 @@
                 loadproducts(`http://fakestoreapi.com/products/category/${categoryname}`);
             }
         }
+        function ctoc(){
+            window.location.href="./checkoutpage.html";
+        }  
         var cartitems=[];//inside values of cart which added by user
         function getcartcount(){
-            document.getElementById('cartCount').innerText=cartitems.length;
+            document.getElementById('cartid').innerText=cartitems.length;
             localStorage.setItem('cardnumber',cartitems.length);
             var pr=[];
             cartitems.map(function(product){
                 pr.push(product.id);
             })
-            localStorage.setItem("cartpr",pr);
-            console.log(pr);
+            if(pr.length===0){
+                localStorage.setItem("msg1","nothing");
+                localStorage.setItem("cartpr",pr);
+                console.log(pr);
+            }
+            else{
+                localStorage.setItem("msg1","products");
+                localStorage.setItem("cartpr",pr);
+            }
+        }
+        const wishlist=new Set();
+        function clicktowish(index){
+            for(let i=0;i<list1.length;i++){
+                if(index===i){
+                    wishlist.add(list1[i]);
+                    console.log(wishlist);
+                }
+                else{
+                    continue;
+                }
+            }
+        }
+        function popwishlist(index){
+            wishlist.forEach((point)=>{
+                if(point.title===index){
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function movetocart(indes){
+            wishlist.forEach((point)=>{
+                if(point.title===indes){
+                    cartitems.push(point);
+                    getcartcount(1);
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function clicktowishing(){
+            document.getElementById('wishinglistoffcanves').innerHTML="";
+            const iterator=wishlist.values();
+            wishlist.forEach(function(product){
+                let div=document.createElement('div');
+                div.className="container-fluid d-flex m-2";
+                div.innerHTML=`
+                    <div><img src="${product.image}" width="150px" height="200px"></div>
+                    <div class="m-2"> 
+                        <h5>${product.title}</h5>
+                        <h4>${product.desc}</h4>
+                        <h6 class="text-muted">&dollar;${product.price}</h6>
+                        <span class="btn btn-outline-dark bi bi-trash mt-1" onclick="popwishlist('${product.title}')"></span>
+                        <button class="btn btn-outline-dark" onclick="movetocart('${product.title}')">Move To Cart</button>
+                    </div>
+                `;
+                document.getElementById('wishinglistoffcanves').appendChild(div);
+
+            })
         }
         function AddClick(id){
             fetch(`http://fakestoreapi.com/products/${id}`)
@@ -215,7 +240,7 @@
         }
     </script>
 </head>
-<body onload="bodyload()" class="container-fluid ">
+<body onload="bodyload()" class="container-fluid">
     <div class="navbar navbar-expand-lg text-dark bg-white">
         <div class="container-fluid">
             <div class="navbar-brand"><a href="./index.html"><h2>Shopper.</h2></a></div>
@@ -339,11 +364,21 @@
                     </li>
                 </ul>
             </div>
-            <div class="text-dark" id="quicklinks">
-                <span class="bi bi-search"></span>
-                <span class="bi bi-heart"></span>
-                <a href="#cart" onclick="cartclick()" data-bs-toggle="modal"><span class="bi bi-cart position-relative"><span class="badge rounded rounded-circle bg-danger" style="position: absolute; top: -10px; left: -9px;" id="cartCount"></span></span></a>
-                <a data-bs-target="#login" data-bs-toggle="modal"><span class="border rounded-2 border-1 bg-warning p-2" id="lgsg">login/signin</span></a><!--this is inter document link where it actually goes to another page from this page to login page-->
+            <div>
+                <div class="navbar-nav navbar-collapse collapse mb-2" id="home">
+                    <div class="container">
+                        <a class="bi bi-search" style="color: black;" id="raj" onclick="disapper(0)"></a>
+                        <form autocomplete="off" id="searchbar">
+                            <div>            
+                                <input type="text" id="input">
+                                <span class="bi bi-search" onclick="disapper(1)"></span>
+                            </div>
+                        </form>
+                    </div>
+                    <a href="#wishlist" data-bs-toggle="offcanvas" onclick="clicktowishing()"><span class="bi bi-heart me-3"></span></a>
+                    <a href="#cart" onclick="cartclick()" data-bs-toggle="modal"><span class="bi bi-cart position-relative me-3"><span class="badge rounded rounded-circle bg-danger" style="position: absolute; top: -10px; left: 5px;" id="cartid"></span></span></a>
+                    <a data-bs-target="#login" data-bs-toggle="modal"><span class="border rounded-2 border-1 bg-warning p-2 me-3" id="lgsg">login/signin</span></a><!--this is inter document link where it actually goes to another page from this page to login page-->
+                </div>
             </div>
             <button class="navbar-toggler" data-bs-target="#home" data-bs-toggle="collapse">
                 <span class="navbar-toggler-icon"></span>
@@ -365,7 +400,6 @@
             </div>
         </nav>
         <main class="col-1 d-flex flex-wrap overflow-auto" style="width: 1200px;" >
-
         </main>
     </section>
     <div class="modal fade" id="cart">
@@ -388,7 +422,26 @@
                             
                         </tbody>
                     </table>
+                    <div class="p-3 bg-light d-flex justify-content-between">
+                        <h5>Subtotal</h5>
+                        <strong id="std"></strong>
+                    </div>
                 </div>
+                <div class="modal-footer">
+                    <button class="btn btn-dark" onclick="ctoc()">Contiune to Checkout</button>
+                    <button class="btn btn-outline-dark">View Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="wishlist">
+        <div class="offcanvas-header border-bottom">
+            <h2 class="offcanvas-title">Wishlist</h2>
+            <button class="btn btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body m-2" >
+            <div id="wishinglistoffcanves">
+
             </div>
         </div>
     </div>
