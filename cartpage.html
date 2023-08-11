@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
     <style>
+        #suggestions{
+            background-color: whitesmoke;
+            position: absolute;
+            z-index: 99;
+        }
+        #searchbar{
+            display: none;
+        }
         .rating {
             --dir: right;
             --fill: black;
@@ -115,6 +123,7 @@
             text-decoration-line: underline;
         }
     </style>
+    <script src="main.js"></script>
     <script>
         let sos=3;
         let sos1=2;
@@ -122,19 +131,11 @@
         let a=0;
         let a1=1;
         let a2=2;
-         var list1=[
-            {"image":"../public/images/Leather%20mid-heel%20Sandals.jpg","color":"Brown","image2":"./public/images/Leather mid-heel Sandals1.jpg","desc":"Shoes","title":"Leather mid-heel Sandals","price":"$129.00","stars":4},
-            {"desc":"Dresses","title":"Cotton floral print Dress","color":"Pink","image2":"./public/images/product-6.jpg","price":"$40.00","image":"./public/images/dress.jpg","stars":5},
-            {"desc":"Shoes","image":"./public/images/shoes.jpg","color":"Blue","image2":"./public/images/product-122.jpg","title":"Leather Sneakers","price":"$85.00","stars":3},
-            {"desc":"Tops","image":"../public/images/tops.jpg","color":"White","image2":"./public/images/tops2.jpg","title":"Cropped cotton Top","price":"$29.00","stars":4},
-            {"image":"../public/images/dresses.jpg","color":"Yellow","image2":"./public/images/dresses2.jpg","desc":"Dresses","title":"Floral print midi Dress","price":"$50.00","stars":3},
-            {"image":"../public/images/bags.jpg","color":"Brown","image2":"./public/images/product-123.jpg","desc":"Bags","title":"Suede cross body Bag","price":"$49.00","stars":5},
-            {"image":"../public/images/skirts.jpg","color":"White-Black","image2":"./public/images/product-124.jpg","desc":"Skirts","title":"Printed A-line Skirt","price":"$79.00","stars":4},
-            {"image":"../public/images/shoes2.jpg","color":"Brown","image2":"./public/images/shoes2-1.jpg","desc":"Shoes","title":"Heel strappy Sandals","price":"$90.00","stars":2}
-        ];
+         
         function bodyload(){
             displaynonedown(0);
             getcartcount(0);
+            autocomplete(document.getElementById('input'), list1);
             let x=localStorage.getItem("item");
             disthismain(x);
             starsmade(list1[x].stars);
@@ -166,17 +167,7 @@
             `;
             document.getElementById("rating").appendChild(span); 
         }
-        function sdc(s){
-            localStorage.setItem("item",s);
-            window.location.href='./cartpage.html';
-            // document.getElementById(a.id).addEventListener("click",function(event){ 
-            //     window.location.href="./cartpage.html";
-            // })
-           
-        }
-        function fastsize1(value){
-            document.getElementById("size44").innerHTML=value;
-        }
+        
         function Preview(v){
             document.getElementById('Previewitems').innerHTML="";
             let div=document.createElement('div');
@@ -194,7 +185,7 @@
                                     <h3>${list1[i].title}</h3>
                                 </div>
                                 <div class="d-flex">
-                                    <span><h4>${list1[i].price}</h4></span>
+                                    <span><h4>&dollar;${list1[i].price}</h4></span>
                                     <span class="m-1">&#40;In Stock&#41;</span>
                                 </div>
                                 <div style="margin-top: 20px;">
@@ -380,46 +371,6 @@
             `;
             document.getElementById("stars").appendChild(span);
         }
-        function displaynonedown(x){
-            switch(x){
-                case 1:
-                    document.getElementById('ds').style='display:none;';
-                    break;
-                case 2:
-                     document.getElementById('catlog').style='display:none';
-                     break;
-                case 3:
-                    document.getElementById('pages').style='display:none';
-                    break;
-                case 4:
-                    document.getElementById('blog').style='display:none';
-                    break;
-                default:
-                    document.getElementById('ds').style='display:none;';
-                    document.getElementById('catlog').style='display:none';
-                    document.getElementById('pages').style='display:none';
-                    document.getElementById('blog').style='display:none';
-            }
-        }
-        function displaydropdown(y){
-            switch(y){
-                case 1:
-                     document.getElementById('ds').style='display:block; position:absolute; top:60px;';
-                     break;
-                case 2:
-                    document.getElementById('catlog').style='position:absolute; top:60px; left:0px; display:block;'; 
-                    break;
-                case 3:
-                    document.getElementById('pages').style='display:block; position:absolute; top:60px;'; 
-                    break;
-                case 4:
-                    document.getElementById('blog').style='display:block; position:absolute; top:60px;';
-                    break;
-            }
-        }
-        function fastsize(value){
-            document.getElementById("size").innerHTML=value;
-        }
         function disthismain(s){
             let div = document.createElement("div");
             div.className="d-flex"
@@ -433,7 +384,7 @@
                         <span id="stars"><span>
                     </div>
                     <h1 style="margin-top:-25px;">${list1[s].title}</h1>
-                    <h5 class="text-muted">${list1[s].price}</h5>
+                    <h5 class="text-muted">&dollar;${list1[s].price}</h5>
                     <h5>Color: ${list1[s].color}</h5>
                     <div class="my-3">
                         <span>
@@ -641,18 +592,6 @@
                 document.getElementById('cartid').innerText=cartitems.length;
             }
         }
-        const wishlist=new Set();
-        function clicktowish(index){
-            for(let i=0;i<list1.length;i++){
-                if(index===i){
-                    wishlist.add(list1[i]);
-                    console.log(wishlist);
-                }
-                else{
-                    continue;
-                }
-            }
-        }
         function liketo(i){
             switch(i){
                 case 1:
@@ -695,44 +634,6 @@
                     break;
             }
         }
-        function popwishlist(index){
-            wishlist.forEach((point)=>{
-                if(point.title===index){
-                    wishlist.delete(point);
-                }
-            })
-            clicktowishing();
-        }
-        function movetocart(indes){
-            wishlist.forEach((point)=>{
-                if(point.title===indes){
-                    cartitems.push(point);
-                    getcartcount(1);
-                    wishlist.delete(point);
-                }
-            })
-            clicktowishing();
-        }
-        function clicktowishing(){
-            document.getElementById('wishinglistoffcanves').innerHTML="";
-            const iterator=wishlist.values();
-            wishlist.forEach(function(product){
-                let div=document.createElement('div');
-                div.className="container-fluid d-flex m-2";
-                div.innerHTML=`
-                    <div><img src="${product.image}" width="150px" height="200px"></div>
-                    <div class="m-2"> 
-                        <h5>${product.title}</h5>
-                        <h4>${product.desc}</h4>
-                        <h6 class="text-muted">${product.price}</h6>
-                        <span class="btn btn-outline-dark bi bi-trash mt-1" onclick="popwishlist('${product.title}')"></span>
-                        <button class="btn btn-outline-dark" onclick="movetocart('${product.title}')">Move To Cart</button>
-                    </div>
-                `;
-                document.getElementById('wishinglistoffcanves').appendChild(div);
-
-            })
-        }
         let list4=[
             {"size":"XS","US":2,"Bust":32,"Waist":"24 - 25","Hips":"33 - 34"},
             {"size":"S","US":4,"Bust":"34-35","Waist":"26 - 27","Hips":"35 - 36"},
@@ -771,6 +672,56 @@
                 tr.appendChild(tdUS);
                 tr.appendChild(tdbust);
                 document.getElementById("e5").appendChild(tr);
+            })
+        }
+        const wishlist=new Set();
+        function clicktowish(index){
+            for(let i=0;i<list1.length;i++){
+                if(index===i){
+                    wishlist.add(list1[i]);
+                    console.log(wishlist);
+                }
+                else{
+                    continue;
+                }
+            }
+        }
+        function popwishlist(index){
+            wishlist.forEach((point)=>{
+                if(point.title===index){
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function movetocart(indes){
+            wishlist.forEach((point)=>{
+                if(point.title===indes){
+                    cartitems.push(point);
+                    getcartcount(1);
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function clicktowishing(){
+            document.getElementById('wishinglistoffcanves').innerHTML="";
+            const iterator=wishlist.values();
+            wishlist.forEach(function(product){
+                let div=document.createElement('div');
+                div.className="container-fluid d-flex m-2";
+                div.innerHTML=`
+                    <div><img src="${product.image}" width="150px" height="200px"></div>
+                    <div class="m-2"> 
+                        <h5>${product.title}</h5>
+                        <h4>${product.desc}</h4>
+                        <h6 class="text-muted">&dollar;${product.price}</h6>
+                        <span class="btn btn-outline-dark bi bi-trash mt-1" onclick="popwishlist('${product.title}')"></span>
+                        <button class="btn btn-outline-dark" onclick="movetocart('${product.title}')">Move To Cart</button>
+                    </div>
+                `;
+                document.getElementById('wishinglistoffcanves').appendChild(div);
+
             })
         }
         function sizes2chart(){
@@ -987,10 +938,18 @@
                 </div>
                 <div>
                     <div class="navbar-nav navbar-collapse collapse mb-2" id="home">
-                        <span class="bi bi-search me-3"></span>
+                        <div class="container">
+                            <a class="bi bi-search" style="color: black;" id="raj" onclick="disapper(0)"></a>
+                            <form autocomplete="off" id="searchbar">
+                                <div>            
+                                    <input type="text" id="input">
+                                    <span class="bi bi-search" onclick="disapper(1)"></span>
+                                </div>
+                            </form>
+                        </div>
                         <a href="#wishlist" data-bs-toggle="offcanvas" onclick="clicktowishing()"><span class="bi bi-heart me-3"></span></a>
                         <a href="#cart" onclick="cartclick()" data-bs-toggle="modal"><span class="bi bi-cart position-relative me-3"><span class="badge rounded rounded-circle bg-danger" style="position: absolute; top: -10px; left: 5px;" id="cartid"></span></span></a>
-                        <a data-bs-target="#login" style="cursor: pointer;" data-bs-toggle="modal"><span class=" border rounded-2 border-1 bg-warning p-2 me-3" id="lgsg">login/signin</span></a><!--this is inter document link where it actually goes to another page from this page to login page-->
+                        <a data-bs-target="#login" data-bs-toggle="modal"><span class="border rounded-2 border-1 bg-warning p-2 me-3" id="lgsg">login/signin</span></a><!--this is inter document link where it actually goes to another page from this page to login page-->
                     </div>
                 </div>
             </div>
