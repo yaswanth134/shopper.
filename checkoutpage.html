@@ -79,17 +79,8 @@
             display: block;
         }
     </style>
+    <script src="main.js"></script>
     <script>
-        var list1=[
-            {"image":"../public/images/Leather%20mid-heel%20Sandals.jpg","color":"Brown","image2":"./public/images/Leather mid-heel Sandals1.jpg","desc":"Shoes","title":"Leather mid-heel Sandals","price":129.00},
-            {"desc":"Dresses","title":"Cotton floral print Dress","color":"Pink","image2":"./public/images/product-6.jpg","price":40.00,"image":"./public/images/dress.jpg"},
-            {"desc":"Shoes","image":"./public/images/shoes.jpg","color":"Blue","image2":"./public/images/product-122.jpg","title":"Leather Sneakers","price":85.00},
-            {"desc":"Tops","image":"../public/images/tops.jpg","color":"White","image2":"./public/images/tops2.jpg","title":"Cropped cotton Top","price":29.00},
-            {"image":"../public/images/dresses.jpg","color":"Yellow","image2":"./public/images/dresses2.jpg","desc":"Dresses","title":"Floral print midi Dress","price":50.00},
-            {"image":"../public/images/bags.jpg","color":"Brown","image2":"./public/images/product-123.jpg","desc":"Bags","title":"Suede cross body Bag","price":49.00},
-            {"image":"../public/images/skirts.jpg","color":"White-Black","image2":"./public/images/product-124.jpg","desc":"Skirts","title":"Printed A-line Skirt","price":79.00},
-            {"image":"../public/images/shoes2.jpg","color":"Brown","image2":"./public/images/shoes2-1.jpg","desc":"Shoes","title":"Heel strappy Sandals","price":90.00}
-        ];
         var cartitems=[];
         function bodyload(){
             //LoadCategories();
@@ -104,7 +95,6 @@
             if(i===0){
                 var cartlen=localStorage.getItem('cardnumber');
                 document.getElementById('cartid').innerText=cartlen;
-                
                 if(cartlen===0){
                     cartclick();
                     console.log("here");
@@ -115,10 +105,7 @@
             }
             else{
                 document.getElementById('cartid').innerText=cartitems.length; 
-                document.getElementById("ordercount").innerHTML=`
-                    (${cartitems.length})
-                `;
-                orderdisplay(); 
+                document.getElementById("ordercount").innerHTML=`(${cartitems.length})`;
             }
         }
         function popclick(js){
@@ -126,6 +113,7 @@
             cartitems.splice(js,1);
             cartclick();
             getcartcount(1);
+            orderdisplay();
         }
         function ctoc(){
             window.location.href="./checkoutpage.html";
@@ -144,13 +132,14 @@
                     })
                     .then(function(product){
                         cartitems.push(product);
-                        reamingcart();
+                        cartclick();
                         getcartcount(1);
+                        orderdisplay();
                     })
                 }
+                reamingcart();
             }
             else{
-                getcartcount(1);
                 reamingcart();
             }
         }
@@ -161,17 +150,63 @@
             if(str==='products'){
                 var res=indexes[0].split(',');
                 console.log(res);
-                for(let i=0;i<list1.length;i++){
-                    res.map(function(index){
-                        console.log(index)
-                        if(index==i){
-                            cartitems.push(list1[i]);
-                            cartclick();
-                            getcartcount(1); 
-                        }
-                    })
+                res.map(function(index){
+                    cartitems.push(list1[index]);
+                    cartclick();
+                    getcartcount(1); 
+                    orderdisplay();
+                })
+            }
+        }
+        const wishlist=new Set();
+        function clicktowish(index){
+            for(let i=0;i<list1.length;i++){
+                if(index===i){
+                    wishlist.add(list1[i]);
+                    console.log(wishlist);
+                }
+                else{
+                    continue;
                 }
             }
+        }
+        function popwishlist(index){
+            wishlist.forEach((point)=>{
+                if(point.title===index){
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function movetocart(indes){
+            wishlist.forEach((point)=>{
+                if(point.title===indes){
+                    cartitems.push(point);
+                    getcartcount(1);
+                    wishlist.delete(point);
+                }
+            })
+            clicktowishing();
+        }
+        function clicktowishing(){
+            document.getElementById('wishinglistoffcanves').innerHTML="";
+            const iterator=wishlist.values();
+            wishlist.forEach(function(product){
+                let div=document.createElement('div');
+                div.className="container-fluid d-flex m-2";
+                div.innerHTML=`
+                    <div><img src="${product.image}" width="150px" height="200px"></div>
+                    <div class="m-2"> 
+                        <h5>${product.title}</h5>
+                        <h4>${product.desc}</h4>
+                        <h6 class="text-muted">&dollar;${product.price}</h6>
+                        <span class="btn btn-outline-dark bi bi-trash mt-1" onclick="popwishlist('${product.title}')"></span>
+                        <button class="btn btn-outline-dark" onclick="movetocart('${product.title}')">Move To Cart</button>
+                    </div>
+                `;
+                document.getElementById('wishinglistoffcanves').appendChild(div);
+
+            })
         }
         function orderdisplay(){
             document.getElementById("orderdisplay1").innerHTML="";
@@ -230,65 +265,6 @@
                 document.getElementById("pricedisplay1").appendChild(ul);
             }
         }
-        function autocomplete(input, list) {
-            //Add an event listener to compare the input value with all countries
-            input.addEventListener('input', function () {
-                //Close the existing list if it is open
-                closeList();
-
-                //If the input is empty, exit the function
-                if (!this.value){
-                    return;
-                }
-                //Create a suggestions <div> and add it to the element containing the input field
-                suggestions = document.createElement('div');
-                suggestions.setAttribute('id', 'suggestions');
-                this.parentNode.appendChild(suggestions);
-                
-                //Iterate through all entries in the list and find matches
-                for (let i=0; i<list.length; i++) {
-                    if (list[i].desc.toUpperCase().includes(this.value.toUpperCase())) {
-                        //If a match is foundm create a suggestion <div> and add it to the suggestions <div>
-                        suggestion = document.createElement('ul');
-                        suggestion.style="list-style: none; margin: 0px 0px 2px -25px";
-                        suggestion.innerHTML = `
-                            <li>
-                                <a onclick="sdc(${i})">${list[i].title}</a>
-                                <img src="${list[i].image}" width="30px" height="30px">
-                            </li>
-                        `;
-                        suggestions.appendChild(suggestion);
-                    }
-                }
-
-            });
-            function closeList() {
-                let suggestions = document.getElementById('suggestions');
-                if (suggestions)
-                    suggestions.parentNode.removeChild(suggestions);
-            }
-        }
-        function displaynonedown(x){
-            switch(x){
-                case 1:
-                    document.getElementById('ds').style='display:none;';
-                    break;
-                case 2:
-                     document.getElementById('catlog').style='display:none';
-                     break;
-                case 3:
-                    document.getElementById('pages').style='display:none';
-                    break;
-                case 4:
-                    document.getElementById('blog').style='display:none';
-                    break;
-                default:
-                    document.getElementById('ds').style='display:none;';
-                    document.getElementById('catlog').style='display:none';
-                    document.getElementById('pages').style='display:none';
-                    document.getElementById('blog').style='display:none';
-            }
-        }
         function cartclick(){
             let pr=0.00;
             if(cartitems.length!==0){
@@ -318,81 +294,6 @@
                 document.getElementById("tbb").innerHTML=`<tr>
                         <td>nothing added to cart</td>
                     </tr>`;
-            }
-        }
-        function displaydropdown(y){
-            switch(y){
-                case 1:
-                     document.getElementById('ds').style='display:block; position:absolute; top:60px;';
-                     break;
-                case 2:
-                    document.getElementById('catlog').style='position:absolute; top:60px; left:0px; display:block;'; 
-                    break;
-                case 3:
-                    document.getElementById('pages').style='display:block; position:absolute; top:60px;'; 
-                    break;
-                case 4:
-                    document.getElementById('blog').style='display:block; position:absolute; top:60px;';
-                    break;
-            }
-        }
-        function addside(cp){
-            if(cp===1)
-            {
-                document.getElementById('coverwomen').style="margin-left:4px;";
-            }
-            else if(cp===2){
-                document.getElementById('covermen').style="margin-left:4px;";
-            }
-            else if(cp===3){
-                document.getElementById('coverkids').style="margin-left:4px;";
-            }
-            else {
-                document.getElementById('ra').style="margin-left:4px;";
-            }
-        }
-        function clicktowishing(){
-            document.getElementById('wishinglistoffcanves').innerHTML="";
-            const iterator=wishlist.values();
-            wishlist.forEach(function(product){
-                let div=document.createElement('div');
-                div.className="container-fluid d-flex m-2";
-                div.innerHTML=`
-                    <div><img src="${product.image}" width="150px" height="200px"></div>
-                    <div class="m-2"> 
-                        <h5>${product.title}</h5>
-                        <h4>${product.desc}</h4>
-                        <h6 class="text-muted">&dollar${product.price}</h6>
-                        <span class="btn btn-outline-dark bi bi-trash mt-1" onclick="popwishlist('${product.title}')"></span>
-                        <button class="btn btn-outline-dark" onclick="movetocart('${product.title}')">Move To Cart</button>
-                    </div>
-                `;
-                document.getElementById('wishinglistoffcanves').appendChild(div);
-
-            })
-        }
-        function lessside(cp){
-            if(cp===1){
-                document.getElementById('coverwomen').style="margin-left:-4px;";
-            }
-            else if(cp===2){
-                document.getElementById('covermen').style="margin-left:-4px;";
-            }
-            else if(cp===3){
-                document.getElementById('coverkids').style="margin-left:-4px;";
-            }
-            else{
-                 document.getElementById('ra').style='margin-left:-4px;';
-            }
-        }
-        function disapper(m){
-            if(m===0){
-                document.getElementById("searchbar").style="display:block;";
-                document.getElementById("raj").style="display:none;";
-            }
-            else{
-                document.getElementById("searchbar").style="display:none;";
-                document.getElementById("raj").style="display:block;";
             }
         }
     </script>
